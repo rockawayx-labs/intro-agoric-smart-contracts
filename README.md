@@ -10,7 +10,7 @@ First make sure you have `node.js` v16 and `yarn` installed on your system.
 Then
 
 - Install the Agoric SDK `git clone https://github.com/Agoric/agoric-sdk`
-- Checkout beta `git checkout beta`
+- Checkout beta `cd agoric-sdk && git checkout beta`
 - Install `yarn && yarn build`
 
 Test whether you can run `agoric --version` and get a version number like `0.15.0` back. If yes, you are all set
@@ -18,8 +18,7 @@ Test whether you can run `agoric --version` and get a version number like `0.15.
 ### Clone the repository
 
 - `git clone https://github.com/rbflabs/gateway-agoric-workshop-2022.git agoric-workshop`
-- `cd agoric-workshop`
-- `agoric install`
+- `cd agoric-workshop && agoric install`
 
 Agoric install performs the necessary installation steps so we can run our examples.
 

@@ -12,6 +12,6 @@
     "author": "Agoric",
     "license": "Apache-2.0",
     "dependencies": {
-        "@agoric/cosmic-swingset": "^0.34.6"
+        "@agoric/cosmic-swingset": "^0.36.0"
     }
 }

@@ -3,44 +3,31 @@ import { makeIssuerKit, AmountMath, AssetKind } from '@agoric/ertp';
 
 
 test('issuers, amounts, payments', async (t) => {
-    // kit: brand, issuer, mint
-    const moolaKit = makeIssuerKit('Moola', AssetKind.NAT)
-    // amount has no value, it's a description of value
-    const moola20 = AmountMath.make(moolaKit.brand, 20n)
-    // payment created by mint
-    const moola20Payment = moolaKit.mint.mintPayment(moola20)
+    // ERTP docs: https://agoric.com/documentation/ertp/guide/
+    // 1. create an Issuer kit: brand, issuer, mint for a Moola token
+    // 2. Define an amount of 20 moolas (note: an amount has no value, it's a description of value)
+    // 3. Mint a payment of 20 moolas (this payment holds value)
+    // 4. Check if the payment amount is exactly what we asked, use t.deepEqual
+    t.fail('no test yet!')
+})
 
-    // the issuer is able to create an empty purse of the right type
-    const purse = moolaKit.issuer.makeEmptyPurse()
-    // deposit payment into purse
-    purse.deposit(moola20Payment)
-
-    t.deepEqual(purse.getCurrentAmount(), moola20)
+test('payments and purses', async (t) => {
+    // 1. create an issuer kit, define an amount of 20 moola and mint a payment
+    // 2. define a purse for Moola (purse only holds one type of asset) and deposit the payment into the purse
+    // 3. try to deposit the payment again and see what happens
+    t.fail('no test yet!')
 })
 
 test('Fungible issuer and AmountMath', async (t) => {
-    // AssetKind.NAT indicates fungible tokens with natural number values
-    const moolaKit = makeIssuerKit('Moola', AssetKind.NAT)
-
-    // 20 + 30
-    const moola20 = AmountMath.make(moolaKit.brand, 20n)
-    const moola30 = AmountMath.make(moolaKit.brand, 20n)
-    // = 50
-    const moola50 = AmountMath.make(moolaKit.brand, 40n)
-    t.deepEqual(moola50, AmountMath.add(moola20, moola30))
-
+    // 1. create an issuer kit for moolas and use AmountMath to add 20 + 30 moolas
+    //    use AssetKind.NAT (this indicates fungible tokens)
+    // 2. 20 + 30 moolas has to come out to 50 moolas, test this usint t.deepEqual
+    t.fail('no test yet!')
 })
 
 test('Non-fungible issuer and AmountMath', async (t) => {
-    // AssetKind.SET indicates unique items (like NFTs)
-    const nftKit = makeIssuerKit('Awesomez', AssetKind.SET)
-
-    // nftA + nftB = ... ?
-    const nftA = AmountMath.make(nftKit.brand, harden(["cryptopunk4551"]))
-    const nftB = AmountMath.make(nftKit.brand, harden(["cryptopunk376"]))
-    const twoNFTs = AmountMath.add(nftA, nftB)
-
-    // ... equals the set of two NFTs
-    t.deepEqual(twoNFTs, AmountMath.make(nftKit.brand, harden(["cryptopunk376", "cryptopunk4551"])))
-    t.deepEqual(twoNFTs, AmountMath.make(nftKit.brand, harden(["cryptopunk4551", "cryptopunk376"])))
+    // 1. create an issuer kit for Awesomez, which are NFTs, use AssetKind.SET
+    // 2. how does AmountMath work here? create two NFTs and try to add them together
+    // 3. what is the result? create the equivalent amount and test equality using t.deepEqual
+    t.fail('no test here yet!')
 })

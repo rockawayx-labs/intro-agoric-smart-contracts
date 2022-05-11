@@ -11,111 +11,57 @@ import { makeZoeKit } from '@agoric/zoe';
 
 import { makeIssuerKit, AmountMath, AssetKind } from '@agoric/ertp';
 
-//const filename = new URL(import.meta.url).pathname;
-//const dirname = path.dirname(filename);
+/* Standard boilerplate to deploy a contract on a Zoe unit test harness:
+* const { admin: fakeVatAdmin } = makeFakeVatAdmin()
+* const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
+* const helloBundle = await bundleSource('./src/contract.js');
+* const helloInstallation = await E(zoe).install(helloBundle)
+*/
+
 
 test('deploy contract for testing', async (t) => {
-  const { admin: fakeVatAdmin } = makeFakeVatAdmin()
-  const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
-
-  const helloBundle = await bundleSource('./src/contract.js');
-  const helloInstallation = await E(zoe).install(helloBundle)
-
-  t.is(await E(helloInstallation).getBundle(), helloBundle)
+  // check if our installation bundle is what is indeed installed
 })
 
 
 test('just say hello', async (t) => {
-  const { admin: fakeVatAdmin } = makeFakeVatAdmin()
-  const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
+  // 1. write a sayHi function which returns 'hi!' into the contract.js file
+  // 2. install the contract as above
+  // 3. instantiate the contract using startInstance
+  // 4. extract the sayHi function test from the creatorFacet
+  // 5. call the function and verify the returned value is 'hi!' using t.is
+})
 
-  const helloBundle = await bundleSource('./src/contract.js');
-  const helloInstallation = await E(zoe).install(helloBundle)
 
-  const { creatorFacet } =
-    await E(zoe).startInstance(helloInstallation, {})
-
-  const { sayHi } = creatorFacet
-
-  t.is('hi!', sayHi())
+test('I invite you to say hello', async (t) => {
+  // 1. write a sayHello function as an offer handler in contract.js, return an invitation in creatorFacet
+  // 2. install the contract as above
+  // 3. instantiate the contract using startInstance
+  // 4. extract the inviteHello function test from the creatorFacet
+  // 5. use the invitation by sending an (empty) offer to the contract
+  // 6. the contract should reply by saying 'Hello!', use getOfferResult to check this
 })
 
 
 test('mint me 20 Moola', async (t) => {
-  const { admin: fakeVatAdmin } = makeFakeVatAdmin()
-  const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
-
-  const helloBundle = await bundleSource('./src/contract.js');
-  const helloInstallation = await E(zoe).install(helloBundle)
-
-  t.is(await E(helloInstallation).getBundle(), helloBundle)
-
-  const { creatorFacet } =
-    await E(zoe).startInstance(helloInstallation, {})
-
-  const { mintInvitation, getIssuer } = creatorFacet
-
-  t.truthy((await E(zoe).getInvitationIssuer()).isLive(mintInvitation))
-  const issuer = await getIssuer()
-
-  const mintProposal = harden({
-    want: { Moola: AmountMath.make(issuer.getBrand(), 20n) }
-  })
-
-  const mySeat = await E(zoe).offer(mintInvitation, mintProposal)
-  const offerResult = await E(mySeat).getOfferResult()
-
-  t.is(offerResult, 'Here is some moola!')
-  const moolaPayout = await E(mySeat).getPayout('Moola')
-
-  const moola20 = AmountMath.make(issuer.getBrand(), 20n)
-  t.deepEqual(await issuer.getAmountOf(moolaPayout), moola20)
+  // 1. write a function that mints 20 moola in the contract.js code add an invitation to the creatorFacet
+  // 2. install the contract
+  // 3. extract the mintInvitation from the creatorFacet and use it in an offer
+  // 4. verify that you get a payment of 20 moola out (how do you verify? using the moola issuer, expose it in contract.js)
 })
 
-test('mint me 100 moola', async (t) => {
-  const { admin: fakeVatAdmin } = makeFakeVatAdmin()
-  const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
 
-  const helloBundle = await bundleSource('./src/contract.js')
-  const helloInstallation = await E(zoe).install(helloBundle)
-
-  t.is(await E(helloInstallation).getBundle(), helloBundle)
-
-  const { creatorFacet } = await E(zoe).startInstance(helloInstallation, {})
-  const { flexibleMintOffer, getIssuer } = creatorFacet
-
-  t.is('Nope, you are asking too much or too little', flexibleMintOffer(1000n))
+test('mint me 80 moola', async (t) => {
+  // 1. write a function that reads the offer (Tokens key) from the user and mints the amount if less than or equal to 100n
+  // 2. install the contract
+  // 3. use the invitation from the contract to send an offer to mint 80 moola, use keyword Tokens again to match
+  // 4. check that the offer ersult is 'Here you go'
+  // 5. deposit the payment into an empty purse
 })
 
-test('mint me 70 moola', async (t) => {
-  const { admin: fakeVatAdmin } = makeFakeVatAdmin()
-  const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
-
-  const helloBundle = await bundleSource('./src/contract.js')
-  const helloInstallation = await E(zoe).install(helloBundle)
-
-  t.is(await E(helloInstallation).getBundle(), helloBundle)
-
-  const { creatorFacet } = await E(zoe).startInstance(helloInstallation, {})
-  const { flexibleMintOffer, getIssuer } = creatorFacet
-
-  const issuer = await getIssuer()
-
-  const myMintInvitation = flexibleMintOffer(70n)
-
-  t.truthy((await E(zoe).getInvitationIssuer()).isLive(myMintInvitation))
-
-  const mintProposal = harden({
-    want: { Moola: AmountMath.make(issuer.getBrand(), 200n) }
-  })
-  const mySeat = await E(zoe).offer(myMintInvitation, mintProposal)
-  const offerResult = await E(mySeat).getOfferResult()
-
-  t.is(offerResult, 'Here is 70 moola for you!')
-
-  const seatPayout = await E(mySeat).getPayout('Moola')
-
-  const expectedPayout = AmountMath.make(issuer.getBrand(), 70n)
-  t.deepEqual(await issuer.getAmountOf(seatPayout), expectedPayout)
-
+test('mint me 500 moola', async (t) => {
+  // repeat previous exercise to check that the contract refuses to mint the amount and there is no payment
 })
+
+
+// bonus exercise - make the moola mint flexible

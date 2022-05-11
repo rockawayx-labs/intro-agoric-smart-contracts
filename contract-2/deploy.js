@@ -49,7 +49,7 @@ const installBundle = async (pathResolve, zoe, board) => {
     // To share the installation, we're going to put it in the
     // board. The board is a shared, on-chain object that maps
     // strings to objects.
-    const CONTRACT_NAME = 'moolaMinter';
+    const CONTRACT_NAME = 'nftMinter';
     const INSTALLATION_BOARD_ID = await E(board).getId(installation);
     console.log('- SUCCESS! contract code installed on Zoe');
     console.log(`-- Contract Name: ${CONTRACT_NAME}`);
@@ -123,7 +123,7 @@ const deployContract = async (homePromise, { pathResolve }) => {
         INSTALLATION_BOARD_ID,
     };
     const defaultsFile = pathResolve(
-        `./contract-2-react/src/moolaMinterConstants.js`,
+        `./contract-2-react/src/nftMinterConstants.js`,
     );
     console.log('writing', defaultsFile);
     const defaultsContents = `\

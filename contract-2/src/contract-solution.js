@@ -41,7 +41,7 @@ const start = async (zcf) => {
 
         seat.exit()
 
-        return 'You minted NFT(s)!'
+        return 'You minted an NFT!'
     }
 
     const creatorFacet = {

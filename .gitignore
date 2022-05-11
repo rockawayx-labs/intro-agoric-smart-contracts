@@ -2,7 +2,11 @@ node_modules
 defaults.js
 installationConstants.js
 _agstate/yarn-links/
+_agstate/agoric-servers/dev
 .idea/
 .yarn/
 .yarnrc
 yarn.lock
+contract-2/src/contract-solution-secret.js
+contract-2/test/test-contract-solution-secret.js
+

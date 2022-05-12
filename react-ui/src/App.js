@@ -16,17 +16,18 @@ const AgoricWalletConnection = makeReactAgoricWalletConnection(React);
 
 
 const MyWalletConnection = ({ connecting }) => {
-  let tokenPursePetname;
 
   const onWalletState = useCallback(async ev => {
     const { walletConnection, state } = ev.detail;
     console.log('onWalletState', state);
+    let tokenPursePetname;
     switch (state) {
       case 'idle': {
         console.log('Connection with wallet established!')
         // This is one of the only methods that the wallet connection facet allows.
         // It connects asynchronously, but you can use promise pipelining immediately.
         const walletBridge = E(walletConnection).getScopedBridge('Contract-2');
+        await E(walletBridge).suggestIssuer('Moola', moolaMinterConstants.TOKEN_ISSUER_BOARD_ID);
 
         // You should reconstruct all state here.
         const zoe = await E(walletBridge).getZoe();
@@ -40,20 +41,18 @@ const MyWalletConnection = ({ connecting }) => {
 
         const mintInvitation = await E(moolaCreatorFacet).makeMintSomeInvitation()
 
-        await E(walletBridge).suggestIssuer('Moola', moolaMinterConstants.TOKEN_ISSUER_BOARD_ID);
-
-        console.log('observing purses ...')
         observeNotifier(E(walletBridge).getPursesNotifier(), {
-          updateState: (purses) => {
-            console.log(purses)
+          updateState: async (purses) => {
             const tokenPurse = purses.find(
               // Does the purse's brand match our token brand?
               ({ brandBoardId }) => brandBoardId === moolaMinterConstants.TOKEN_BRAND_BOARD_ID,
             )
-            console.log(tokenPurse)
             if (tokenPurse && tokenPurse.pursePetname) {
               // If we got a petname for that purse, use it in the offers we create.
               tokenPursePetname = tokenPurse.pursePetname
+              const depositFacet = tokenPurse.getDepositFacet()
+              const depositFacetId = await E(board).getId(depositFacet)
+              console.log(`deposit facet id for the Moola purse is ${depositFacetId}`)
             }
           },
         })
@@ -69,6 +68,7 @@ const MyWalletConnection = ({ connecting }) => {
           const offerConfig = {
             id: Date.now(),
             invitation: mintInvitation,
+            installationHandleBoardId: moolaMinterConstants.INSTALLATION_BOARD_ID,
             proposalTemplate: {
               want: {
                 Tokens: {
@@ -81,7 +81,7 @@ const MyWalletConnection = ({ connecting }) => {
           }
 
           await E(walletBridge).addOffer(offerConfig)
-        }, 5000)
+        }, 10 * 1000)
 
 
 

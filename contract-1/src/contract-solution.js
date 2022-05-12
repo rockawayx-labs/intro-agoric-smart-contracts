@@ -37,7 +37,6 @@ const start = async (zcf) => {
             seat.fail()
             return 'You are asking too much'
         }
-        // FIXME: might have to mint into a special seat and do a zcf.reallocate here?
         moolaMint.mintGains(want, seat)
         seat.exit()
         return 'Here you go'

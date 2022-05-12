@@ -31,7 +31,7 @@ import { pursePetnames } from './petnames.js';
  * @param {(path: string) => string} pathResolve
  * @param {ERef<ZoeService>} zoe
  * @param {ERef<Board>} board
- * @returns {Promise<{ CONTRACT_NAME: string, INSTALLATION_BOARD_ID: string }>}
+ * @returns {Promise<{ CONTRACT_NAME: string, INSTALLATION_BOARD_ID: string, TOKEN_ISSUER_BOARD_ID: string, TOKEN_BRAND_BOARD_ID: string }>}
  */
 const installBundle = async (pathResolve, zoe, board) => {
     // We must bundle up our contract code (./src/contract.js)
@@ -40,6 +40,12 @@ const installBundle = async (pathResolve, zoe, board) => {
     // reuse again and again to create new, live contract instances.
     const bundle = await bundleSource(pathResolve(`./src/contract-solution.js`));
     const installation = await E(zoe).install(bundle);
+
+    const { creatorFacet } = await E(zoe).startInstance(installation)
+    const tokenIssuer = await E(creatorFacet).getIssuer()
+    const TOKEN_ISSUER_BOARD_ID = await E(board).getId(tokenIssuer)
+    const TOKEN_BRAND_BOARD_ID = await E(board).getId(await E(tokenIssuer).getBrand())
+
 
     // Let's share this installation with other people, so that
     // they can run our contract code by making a contract
@@ -54,7 +60,9 @@ const installBundle = async (pathResolve, zoe, board) => {
     console.log('- SUCCESS! contract code installed on Zoe');
     console.log(`-- Contract Name: ${CONTRACT_NAME}`);
     console.log(`-- Installation Board Id: ${INSTALLATION_BOARD_ID}`);
-    return { CONTRACT_NAME, INSTALLATION_BOARD_ID };
+    console.log(`-- Token Issuer Board Id: ${TOKEN_ISSUER_BOARD_ID}`);
+    console.log(`-- Token Brand Board Id: ${TOKEN_BRAND_BOARD_ID}`);
+    return { CONTRACT_NAME, INSTALLATION_BOARD_ID, TOKEN_ISSUER_BOARD_ID, TOKEN_BRAND_BOARD_ID };
 };
 
 /**
@@ -111,19 +119,26 @@ const deployContract = async (homePromise, { pathResolve }) => {
     } = home;
 
     await sendDeposit(wallet, faucet);
-    const { CONTRACT_NAME, INSTALLATION_BOARD_ID } = await installBundle(
+    const { CONTRACT_NAME, INSTALLATION_BOARD_ID, TOKEN_ISSUER_BOARD_ID, TOKEN_BRAND_BOARD_ID } = await installBundle(
         pathResolve,
         zoe,
         board,
     );
 
+    const invitationIssuer = await E(zoe).getInvitationIssuer()
+    const invitationBrand = await E(invitationIssuer).getBrand()
+    const INVITE_BRAND_BOARD_ID = await E(board).getId(invitationBrand);
+
     // Save the constants somewhere where the UI and api can find it.
     const dappConstants = {
         CONTRACT_NAME,
         INSTALLATION_BOARD_ID,
+        TOKEN_ISSUER_BOARD_ID,
+        TOKEN_BRAND_BOARD_ID,
+        INVITE_BRAND_BOARD_ID
     };
     const defaultsFile = pathResolve(
-        `./contract-2-react/src/moolaMinterConstants.js`,
+        `./react-ui/src/moolaMinterConstants.js`,
     );
     console.log('writing', defaultsFile);
     const defaultsContents = `\

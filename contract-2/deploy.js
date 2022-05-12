@@ -123,7 +123,7 @@ const deployContract = async (homePromise, { pathResolve }) => {
         INSTALLATION_BOARD_ID,
     };
     const defaultsFile = pathResolve(
-        `./contract-2-react/src/nftMinterConstants.js`,
+        `./react-ui/src/nftMinterConstants.js`,
     );
     console.log('writing', defaultsFile);
     const defaultsContents = `\

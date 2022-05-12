@@ -26,7 +26,7 @@ test('I want to buy an NFT', async (t) => {
     const { creatorFacet } =
         await E(zoe).startInstance(helloInstallation, harden({ Tokens: moolaIssuer }), { Moola: moolaIssuer })
 
-    const { mintNFTsInvitation, getNFTIssuer } = creatorFacet
+    const { makeMintNFTsInvitation, getNFTIssuer } = creatorFacet
 
     // prepare our NFT outside the contract
     const nftIssuer = getNFTIssuer()
@@ -36,7 +36,7 @@ test('I want to buy an NFT', async (t) => {
 
     const moola100 = AmountMath.make(moolaIssuer.getBrand(), 100n)
     const firstPayment = moolaMint.mintPayment(moola100)
-    const nftSeat = await E(zoe).offer(mintNFTsInvitation(), harden({
+    const nftSeat = await E(zoe).offer(makeMintNFTsInvitation(), harden({
         want: { Awesomez: punk4551 },
         give: { Tokens: moola100 }
     }), { Tokens: firstPayment })
@@ -64,7 +64,7 @@ test('I want to buy an NFT for the WRONG currency', async (t) => {
     const { creatorFacet } =
         await E(zoe).startInstance(helloInstallation, harden({ Tokens: moolaIssuer }), { Moola: moolaIssuer })
 
-    const { mintNFTsInvitation, getNFTIssuer } = creatorFacet
+    const { makeMintNFTsInvitation, getNFTIssuer } = creatorFacet
 
     const { issuer: otherIssuer, mint: otherMint } = makeIssuerKit('Other')
 
@@ -79,7 +79,7 @@ test('I want to buy an NFT for the WRONG currency', async (t) => {
     const otherPayment = otherMint.mintPayment(other100)
 
     try {
-        const nftSeat = await E(zoe).offer(mintNFTsInvitation(), harden({
+        const nftSeat = await E(zoe).offer(makeMintNFTsInvitation(), harden({
             want: { Awesomez: punk4551 },
             give: { Tokens: other100 }
         }), { Tokens: otherPayment })

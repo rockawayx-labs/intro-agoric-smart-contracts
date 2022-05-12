@@ -1,6 +1,7 @@
 // Eventually will be importable from '@agoric/zoe-contract-support'
 import { AssetKind, AmountMath } from '@agoric/ertp'
 import { assertProposalShape, assertIssuerKeywords } from '@agoric/zoe/src/contractSupport/index.js'
+import { Far } from '@endo/marshal';
 
 
 /**
@@ -47,11 +48,11 @@ const start = async (zcf) => {
     const creatorFacet = {
         // getBalance solution is secret :)
         // getProfit solution is secret :)
-        mintNFTsInvitation: () => zcf.makeInvitation(mintNFTs, 'mintNFTs'),
+        makeMintNFTsInvitation: () => zcf.makeInvitation(mintNFTs, 'mintNFTs'),
         getNFTIssuer: () => nftIssuer,
     }
 
-    return harden({ creatorFacet });
+    return harden({ creatorFacet: Far('creatorFacet', creatorFacet) });
 };
 
 harden(start);

@@ -9,7 +9,7 @@ import { E } from '@endo/eventual-send';
 import { makeFakeVatAdmin } from '@agoric/zoe/tools/fakeVatAdmin.js';
 import { makeZoeKit } from '@agoric/zoe';
 
-import { makeIssuerKit, AmountMath, AssetKind } from '@agoric/ertp';
+import { AmountMath } from '@agoric/ertp';
 
 test('deploy contract for testing', async (t) => {
   const { admin: fakeVatAdmin } = makeFakeVatAdmin()
@@ -106,7 +106,7 @@ test('mint me 80 moola', async (t) => {
 })
 
 
-test('mint me 500 moola', async (t) => {
+test('mint me 5000 moola', async (t) => {
   const { admin: fakeVatAdmin } = makeFakeVatAdmin()
   const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
 
@@ -122,7 +122,7 @@ test('mint me 500 moola', async (t) => {
 
   const issuer = getIssuer()
 
-  const requestedAmount = AmountMath.make(issuer.getBrand(), 500n)
+  const requestedAmount = AmountMath.make(issuer.getBrand(), 5000n)
 
   const mintProposal = harden({
     want: { Tokens: requestedAmount }
@@ -135,38 +135,3 @@ test('mint me 500 moola', async (t) => {
   const tokensReceived = await E(mySeat).getPayout('Tokens')
   t.deepEqual(AmountMath.makeEmpty(issuer.getBrand()), await issuer.getAmountOf(tokensReceived))
 })
-
-/*
-test('mint me 70 moola', async (t) => {
-  const { admin: fakeVatAdmin } = makeFakeVatAdmin()
-  const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
-
-  const helloBundle = await bundleSource('./src/contract-solution.js')
-  const helloInstallation = await E(zoe).install(helloBundle)
-
-  t.is(await E(helloInstallation).getBundle(), helloBundle)
-
-  const { creatorFacet } = await E(zoe).startInstance(helloInstallation, {})
-  const { flexibleMintOffer, getIssuer } = creatorFacet
-
-  const issuer = await getIssuer()
-
-  const myMintInvitation = flexibleMintOffer(70n)
-
-  t.truthy((await E(zoe).getInvitationIssuer()).isLive(myMintInvitation))
-
-  const mintProposal = harden({
-    want: { Moola: AmountMath.make(issuer.getBrand(), 200n) }
-  })
-  const mySeat = await E(zoe).offer(myMintInvitation, mintProposal)
-  const offerResult = await E(mySeat).getOfferResult()
-
-  t.is(offerResult, 'Here is 70 moola for you!')
-
-  const seatPayout = await E(mySeat).getPayout('Moola')
-
-  const expectedPayout = AmountMath.make(issuer.getBrand(), 70n)
-  t.deepEqual(await issuer.getAmountOf(seatPayout), expectedPayout)
-
-})
-*/

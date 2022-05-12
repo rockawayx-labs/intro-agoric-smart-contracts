@@ -1,4 +1,5 @@
 // Eventually will be importable from '@agoric/zoe-contract-support'
+import { Far } from '@endo/marshal'
 import { AssetKind, AmountMath } from '@agoric/ertp'
 import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js'
 
@@ -32,7 +33,7 @@ const start = async (zcf) => {
         })
         const { want } = seat.getProposal()
         const amount = want.Tokens
-        if (AmountMath.isGTE(amount, AmountMath.make(moolaBrand, 100n))) {
+        if (AmountMath.isGTE(amount, AmountMath.make(moolaBrand, 1000n))) {
             seat.fail()
             return 'You are asking too much'
         }
@@ -53,7 +54,7 @@ const start = async (zcf) => {
         getIssuer: () => issuer,
     }
 
-    return harden({ creatorFacet });
+    return harden({ creatorFacet: Far('creatorFacet', creatorFacet) });
 };
 
 harden(start);

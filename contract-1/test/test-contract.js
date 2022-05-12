@@ -52,15 +52,15 @@ test('mint me 20 Moola', async (t) => {
 
 
 test('mint me 80 moola', async (t) => {
-  // 1. write a function that reads the offer (Tokens key) from the user and mints the amount if less than or equal to 100n
+  // 1. write a function that reads the offer (Tokens key) from the user and mints the amount if less than or equal to 1000n
   // 2. install the contract
   // 3. use the invitation from the contract to send an offer to mint 80 moola, use keyword Tokens again to match
   // 4. check that the offer ersult is 'Here you go'
   // 5. deposit the payment into an empty purse
 })
 
-test('mint me 500 moola', async (t) => {
-  // repeat previous exercise to check that the contract refuses to mint the amount and there is no payment
+test('mint me 5000 moola', async (t) => {
+  // repeat previous exercise to check that the contract refuses to mint the amount and a zero payment is extracted
 })
 
 

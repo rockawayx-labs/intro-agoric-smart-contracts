@@ -14,7 +14,6 @@ import './App.css';
 // the app's instance of React.
 const AgoricWalletConnection = makeReactAgoricWalletConnection(React);
 
-
 const MyWalletConnection = ({ connecting }) => {
 
   const onWalletState = useCallback(async ev => {

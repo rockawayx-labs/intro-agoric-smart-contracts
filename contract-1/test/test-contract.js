@@ -12,10 +12,10 @@ import { makeZoeKit } from '@agoric/zoe';
 import { makeIssuerKit, AmountMath, AssetKind } from '@agoric/ertp';
 
 /* Standard boilerplate to deploy a contract on a Zoe unit test harness:
-* const { admin: fakeVatAdmin } = makeFakeVatAdmin()
-* const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
-* const helloBundle = await bundleSource('./src/contract.js');
-* const helloInstallation = await E(zoe).install(helloBundle)
+   const { admin: fakeVatAdmin } = makeFakeVatAdmin()
+   const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
+   const helloBundle = await bundleSource('./src/contract.js');
+   const helloInstallation = await E(zoe).install(helloBundle)
 */
 
 

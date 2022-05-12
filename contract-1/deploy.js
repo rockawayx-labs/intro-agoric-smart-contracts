@@ -31,7 +31,7 @@ import { pursePetnames } from './petnames.js';
  * @param {(path: string) => string} pathResolve
  * @param {ERef<ZoeService>} zoe
  * @param {ERef<Board>} board
- * @returns {Promise<{ CONTRACT_NAME: string, INSTALLATION_BOARD_ID: string, TOKEN_ISSUER_BOARD_ID: string, TOKEN_BRAND_BOARD_ID: string }>}
+ * @returns {Promise<{ CONTRACT_NAME: string, INSTALLATION_BOARD_ID: string, INSTANCE_BOARD_ID: string, TOKEN_ISSUER_BOARD_ID: string, TOKEN_BRAND_BOARD_ID: string }>}
  */
 const installBundle = async (pathResolve, zoe, board) => {
     // We must bundle up our contract code (./src/contract.js)
@@ -41,7 +41,7 @@ const installBundle = async (pathResolve, zoe, board) => {
     const bundle = await bundleSource(pathResolve(`./src/contract-solution.js`));
     const installation = await E(zoe).install(bundle);
 
-    const { creatorFacet } = await E(zoe).startInstance(installation)
+    const { creatorFacet, instance } = await E(zoe).startInstance(installation)
     const tokenIssuer = await E(creatorFacet).getIssuer()
     const TOKEN_ISSUER_BOARD_ID = await E(board).getId(tokenIssuer)
     const TOKEN_BRAND_BOARD_ID = await E(board).getId(await E(tokenIssuer).getBrand())
@@ -57,12 +57,14 @@ const installBundle = async (pathResolve, zoe, board) => {
     // strings to objects.
     const CONTRACT_NAME = 'moolaMinter';
     const INSTALLATION_BOARD_ID = await E(board).getId(installation);
+    const INSTANCE_BOARD_ID = await E(board).getId(instance)
     console.log('- SUCCESS! contract code installed on Zoe');
     console.log(`-- Contract Name: ${CONTRACT_NAME}`);
     console.log(`-- Installation Board Id: ${INSTALLATION_BOARD_ID}`);
+    console.log(`-- Instance Board Id: ${INSTANCE_BOARD_ID}`);
     console.log(`-- Token Issuer Board Id: ${TOKEN_ISSUER_BOARD_ID}`);
     console.log(`-- Token Brand Board Id: ${TOKEN_BRAND_BOARD_ID}`);
-    return { CONTRACT_NAME, INSTALLATION_BOARD_ID, TOKEN_ISSUER_BOARD_ID, TOKEN_BRAND_BOARD_ID };
+    return { CONTRACT_NAME, INSTALLATION_BOARD_ID, INSTANCE_BOARD_ID, TOKEN_ISSUER_BOARD_ID, TOKEN_BRAND_BOARD_ID };
 };
 
 /**
@@ -119,7 +121,7 @@ const deployContract = async (homePromise, { pathResolve }) => {
     } = home;
 
     await sendDeposit(wallet, faucet);
-    const { CONTRACT_NAME, INSTALLATION_BOARD_ID, TOKEN_ISSUER_BOARD_ID, TOKEN_BRAND_BOARD_ID } = await installBundle(
+    const { CONTRACT_NAME, INSTALLATION_BOARD_ID, INSTANCE_BOARD_ID, TOKEN_ISSUER_BOARD_ID, TOKEN_BRAND_BOARD_ID } = await installBundle(
         pathResolve,
         zoe,
         board,
@@ -133,6 +135,7 @@ const deployContract = async (homePromise, { pathResolve }) => {
     const dappConstants = {
         CONTRACT_NAME,
         INSTALLATION_BOARD_ID,
+        INSTANCE_BOARD_ID,
         TOKEN_ISSUER_BOARD_ID,
         TOKEN_BRAND_BOARD_ID,
         INVITE_BRAND_BOARD_ID

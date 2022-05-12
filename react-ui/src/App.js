@@ -50,9 +50,7 @@ const MyWalletConnection = ({ connecting }) => {
             if (tokenPurse && tokenPurse.pursePetname) {
               // If we got a petname for that purse, use it in the offers we create.
               tokenPursePetname = tokenPurse.pursePetname
-              const depositFacet = tokenPurse.getDepositFacet()
-              const depositFacetId = await E(board).getId(depositFacet)
-              console.log(`deposit facet id for the Moola purse is ${depositFacetId}`)
+              console.log(`found purse name ${tokenPursePetname}`)
             }
           },
         })
@@ -66,9 +64,8 @@ const MyWalletConnection = ({ connecting }) => {
         console.log('setting timeout for 5 s')
         setTimeout(async () => {
           const offerConfig = {
-            id: Date.now(),
+            id: `${Date.now()}`,
             invitation: mintInvitation,
-            installationHandleBoardId: moolaMinterConstants.INSTALLATION_BOARD_ID,
             proposalTemplate: {
               want: {
                 Tokens: {

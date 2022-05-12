@@ -7,11 +7,17 @@ Without the pre-requisites you won't be able to complete the exercises.
 ### Install the Agoric SDK
 
 First make sure you have `node.js` v16 and `yarn` installed on your system.
-Then
+Please check:
+
+- `node --version` returns  `v16.YY.ZZ` the minor and patch version are not important
+- `yarn --version` returns a version like `1.22.ZZ`
+
+Then:
 
 - Install the Agoric SDK `git clone https://github.com/Agoric/agoric-sdk`
 - Checkout beta `cd agoric-sdk && git checkout beta`
 - Install `yarn && yarn build`
+- Install the `agoric` script by running `yarn link-cli`
 
 Test whether you can run `agoric --version` and get a version number like `0.15.0` back. If yes, you are all set.
 
@@ -32,6 +38,12 @@ In the `contract-0` directory, we focus on test driven development (there is no 
 
 Relevant documentation: [ERTP](https://agoric.com/documentation/getting-started/ertp-introduction.html)
 
+To begin working:
+`cd contract-0`
+`npx ava test/test-contract.js -w`
+
+Do this either inside the terminal.
+
 ## contract-1
 
 `contract-1` is is our first contract that has real functionality - minting Moolas (imaginary fungible asset).
@@ -42,6 +54,13 @@ Relevant documentation: [ERTP](https://agoric.com/documentation/getting-started/
 4. We extract the payment and deposit it into our purse.
 
 Relevant documentation: [Zoe](https://agoric.com/documentation/getting-started/intro-zoe.html)
+
+To begin working:
+`cd contract-1`
+`npx ava test/test-contract.js -w`
+
+Do this either inside the terminal.
+
 ## contract-2
 
 `contract-2` allows the creator to mint NFTs in exchange for Moolas.
@@ -50,3 +69,9 @@ Relevant documentation: [Zoe](https://agoric.com/documentation/getting-started/i
 2. We then write a function which allows the user to mint an `Awesomez` NFT in return for a payment of Moolas.
 3. We check whether we have received the right thing in our test.
 4. We test **offer safety** in a test by introducing a bug into the contract and show that Zoe stops the exchange.
+
+To begin working:
+`cd contract-2`
+`npx ava test/test-contract.js -w`
+
+Do this either inside the terminal.

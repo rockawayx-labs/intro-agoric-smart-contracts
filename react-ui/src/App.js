@@ -23,22 +23,23 @@ const MyWalletConnection = ({ connecting }) => {
     switch (state) {
       case 'idle': {
         console.log('Connection with wallet established!')
+
         // This is one of the only methods that the wallet connection facet allows.
         // It connects asynchronously, but you can use promise pipelining immediately.
         const walletBridge = E(walletConnection).getScopedBridge('Contract-2');
-        await E(walletBridge).suggestIssuer('Moola', moolaMinterConstants.TOKEN_ISSUER_BOARD_ID);
+
 
         // You should reconstruct all state here.
         const zoe = await E(walletBridge).getZoe();
         const board = await E(walletBridge).getBoard()
 
-        const moolaInstallation = await E(board).getValue(moolaMinterConstants.INSTALLATION_BOARD_ID)
-        //const nftInstallation = await E(board).getValue(nftMinterConstants.INSTALLATION_BOARD_ID)
+        const moolaInstance = await E(board).getValue(moolaMinterConstants.INSTANCE_BOARD_ID)
+        const moolaPublicFacet = await E(zoe).getPublicFacet(moolaInstance)
+        const mintInvitation = await E(moolaPublicFacet).makeMintSomeInvitation()
 
-        const moolaInstance = await E(zoe).startInstance(moolaInstallation)
-        const { creatorFacet: moolaCreatorFacet } = moolaInstance
-
-        const mintInvitation = await E(moolaCreatorFacet).makeMintSomeInvitation()
+        E(walletBridge).suggestIssuer('Moola', moolaMinterConstants.TOKEN_ISSUER_BOARD_ID);
+        E(walletConnection).suggestInstallation('Installation', moolaMinterConstants.INSTALLATION_BOARD_ID);
+        E(walletConnection).suggestInstance('Instance', moolaMinterConstants.INSTANCE_BOARD_ID);
 
         observeNotifier(E(walletBridge).getPursesNotifier(), {
           updateState: async (purses) => {

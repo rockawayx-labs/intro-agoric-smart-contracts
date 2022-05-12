@@ -53,7 +53,12 @@ const start = async (zcf) => {
         getIssuer: () => issuer,
     }
 
-    return harden({ creatorFacet: Far('creatorFacet', creatorFacet) });
+    const publicFacet = {
+        makeMintSomeInvitation: () => zcf.makeInvitation(mintSomeMoola, 'mintSome'),
+        getIssuer: () => issuer,
+    }
+
+    return harden({ creatorFacet: Far('creatorFacet', creatorFacet), publicFacet: Far('publicFacet', publicFacet) });
 };
 
 harden(start);

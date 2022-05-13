@@ -58,6 +58,8 @@ const start = async (zcf) => {
         getIssuer: () => issuer,
     }
 
+    // in the solution, we also provide a public Facet that is available
+    // to anyone holding a reference to the contract itself. We thus allow anyone to mint themselves money
     return harden({ creatorFacet: Far('creatorFacet', creatorFacet), publicFacet: Far('publicFacet', publicFacet) });
 };
 

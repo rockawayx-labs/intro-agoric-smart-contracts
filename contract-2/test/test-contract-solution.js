@@ -31,6 +31,7 @@ test('I want to buy an NFT', async (t) => {
     // prepare our NFT outside the contract
     const nftIssuer = getNFTIssuer()
     t.deepEqual(nftIssuer.getAllegedName(), 'Awesomez')
+
     const nftBrand = nftIssuer.getBrand()
     const punk4551 = AmountMath.make(nftBrand, harden(["cryptopunk4551"]))
 

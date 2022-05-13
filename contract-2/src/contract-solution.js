@@ -52,7 +52,13 @@ const start = async (zcf) => {
         getNFTIssuer: () => nftIssuer,
     }
 
-    return harden({ creatorFacet: Far('creatorFacet', creatorFacet) });
+    // we allow the public facet minting functionality as well
+    const publicFacet = {
+        makeMintNFTsInvitation: () => zcf.makeInvitation(mintNFTs, 'mintNFTs'),
+        getNFTIssuer: () => nftIssuer,
+    }
+
+    return harden({ creatorFacet: Far('creatorFacet', creatorFacet), publicFacet: Far('publicFacet', publicFacet) });
 };
 
 harden(start);

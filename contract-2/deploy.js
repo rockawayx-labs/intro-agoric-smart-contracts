@@ -6,6 +6,16 @@ import { E } from '@endo/eventual-send';
 import bundleSource from '@endo/bundle-source';
 
 import { pursePetnames } from './petnames.js';
+// import minterConstants from '../react-ui/src/moolaMinterConstants.js'
+
+const minterConstants = {
+    "CONTRACT_NAME": "moolaMinter",
+    "INSTALLATION_BOARD_ID": "board02314",
+    "INSTANCE_BOARD_ID": "board05815",
+    "TOKEN_ISSUER_BOARD_ID": "board04312",
+    "TOKEN_BRAND_BOARD_ID": "board00613",
+    "INVITE_BRAND_BOARD_ID": "board0223"
+}
 
 // This script takes our contract code, installs it on Zoe, and makes
 // the installation publicly available. Our backend API script will
@@ -31,7 +41,7 @@ import { pursePetnames } from './petnames.js';
  * @param {(path: string) => string} pathResolve
  * @param {ERef<ZoeService>} zoe
  * @param {ERef<Board>} board
- * @returns {Promise<{ CONTRACT_NAME: string, INSTALLATION_BOARD_ID: string }>}
+ * @returns {Promise<{ CONTRACT_NAME: string, INSTALLATION_BOARD_ID: string, INSTANCE_BOARD_ID: string, NFT_ISSUER_BOARD_ID: string, NFT_BRAND_BOARD_ID: string }>}
  */
 const installBundle = async (pathResolve, zoe, board) => {
     // We must bundle up our contract code (./src/contract.js)
@@ -40,6 +50,13 @@ const installBundle = async (pathResolve, zoe, board) => {
     // reuse again and again to create new, live contract instances.
     const bundle = await bundleSource(pathResolve(`./src/contract-solution.js`));
     const installation = await E(zoe).install(bundle);
+
+    const moolaIssuer = await E(board).getValue(minterConstants.TOKEN_ISSUER_BOARD_ID)
+
+    const { creatorFacet, instance } = await E(zoe).startInstance(installation, harden({ Tokens: moolaIssuer }), { Moola: moolaIssuer })
+    const nftIssuer = await E(creatorFacet).getNFTIssuer()
+    const NFT_ISSUER_BOARD_ID = await E(board).getId(nftIssuer)
+    const NFT_BRAND_BOARD_ID = await E(board).getId(await E(nftIssuer).getBrand())
 
     // Let's share this installation with other people, so that
     // they can run our contract code by making a contract
@@ -50,11 +67,15 @@ const installBundle = async (pathResolve, zoe, board) => {
     // board. The board is a shared, on-chain object that maps
     // strings to objects.
     const CONTRACT_NAME = 'nftMinter';
-    const INSTALLATION_BOARD_ID = await E(board).getId(installation);
-    console.log('- SUCCESS! contract code installed on Zoe');
-    console.log(`-- Contract Name: ${CONTRACT_NAME}`);
-    console.log(`-- Installation Board Id: ${INSTALLATION_BOARD_ID}`);
-    return { CONTRACT_NAME, INSTALLATION_BOARD_ID };
+    const INSTALLATION_BOARD_ID = await E(board).getId(installation)
+    const INSTANCE_BOARD_ID = await E(board).getId(instance)
+    console.log('- SUCCESS! contract code installed on Zoe')
+    console.log(`-- Contract Name: ${CONTRACT_NAME}`)
+    console.log(`-- Installation Board Id: ${INSTALLATION_BOARD_ID}`)
+    console.log(`-- Instance Board Id: ${INSTANCE_BOARD_ID}`)
+    console.log(`-- NFT Issuer Board Id: ${NFT_ISSUER_BOARD_ID}`)
+    console.log(`-- NFT Brand Brand Id: ${NFT_BRAND_BOARD_ID}`)
+    return { CONTRACT_NAME, INSTALLATION_BOARD_ID, INSTANCE_BOARD_ID, NFT_ISSUER_BOARD_ID, NFT_BRAND_BOARD_ID }
 };
 
 /**
@@ -111,7 +132,7 @@ const deployContract = async (homePromise, { pathResolve }) => {
     } = home;
 
     await sendDeposit(wallet, faucet);
-    const { CONTRACT_NAME, INSTALLATION_BOARD_ID } = await installBundle(
+    const { CONTRACT_NAME, INSTALLATION_BOARD_ID, INSTANCE_BOARD_ID, NFT_ISSUER_BOARD_ID, NFT_BRAND_BOARD_ID } = await installBundle(
         pathResolve,
         zoe,
         board,
@@ -121,6 +142,9 @@ const deployContract = async (homePromise, { pathResolve }) => {
     const dappConstants = {
         CONTRACT_NAME,
         INSTALLATION_BOARD_ID,
+        INSTANCE_BOARD_ID,
+        NFT_ISSUER_BOARD_ID,
+        NFT_BRAND_BOARD_ID
     };
     const defaultsFile = pathResolve(
         `./react-ui/src/nftMinterConstants.js`,

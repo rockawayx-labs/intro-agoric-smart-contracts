@@ -4,27 +4,11 @@ import { observeNotifier } from '@agoric/notifier';
 
 import React, { useCallback, useState } from 'react';
 import { makeReactAgoricWalletConnection } from '@agoric/wallet-connection/react';
-import moolaMinterConstants from './moolaMinterConstants'
+import moolaMinterConstants from './moolaMinterConstants.mjs'
 import nftMinterConstants from './nftMinterConstants'
 
 import './App.css';
 import { AmountMath } from '../../../agoric-sdk/node_modules/@agoric/ertp/src/amountMath';
-
-/*
-                const nftInstance = await E(zoe).startInstance(nftInstallation, { Tokens: moolaIssuer }, { Moola: moolaIssuer })
-                const { creatorFacet: nftCreatorFacet } = nftInstance
-        
-                const nftIssuer = await E(nftCreatorFacet).getNFTIssuer()
-                const nftBrand = await E(nftIssuer).getBrand()
-                const nftMintInvitation = await E(nftCreatorFacet).mintNFTsInvitation()
-                console.log(nftMintInvitation)
-        
-                const wantNFT = AmountMath.make(nftBrand, harden(["cryptopunk4551"]))
-                const nftSeat = await E(zoe).offer(nftMintInvitation, { want: { Awesomez: wantNFT }, give: { Tokens: moola100 } }, { Tokens: myMoola })
-        
-                const nftResult = await E(nftSeat).getOfferResult()
-                console.log(nftResult)
-                */
 
 
 // Create a wrapper for agoric-wallet-connection that is specific to
@@ -56,7 +40,6 @@ const MintingForm = (props) => {
   }
 
   const { zoe, board, walletBridge } = agoricInterface
-
 
   const mintSomeMoola = async () => {
     console.log('mintMoola handler running')
@@ -104,7 +87,7 @@ const MintingForm = (props) => {
         want: {
           Awesomez: {
             pursePetname: awesomezPursePetname,
-            value: AmountMath.make(nftBrand, harden([nftName]))
+            value: harden([nftName])
           }
         }
       }

@@ -74,4 +74,17 @@ To begin working:
 `cd contract-2`
 `npx ava test/test-contract.js -w`
 
-Do this either inside the terminal.
+## react-ui
+
+`react-ui` is a dApp that binds together `contract-1` and `contract-2` so that the former mints Moola tokens which are accepted by the latter.
+
+To begin working move to the root of the repository and:
+`agoric start --reset`
+`agoric deploy contract-1/deploy.js`
+`agoric deploy contract-2/deploy.js`
+`agoric open` 
+`cd react-ui`
+`yarn`
+`yarn start`
+
+After the above process you should have two tabs open in your browser with the Agoric wallet and with the React application. Enter a value into the first text field and mint some Moola. When you have over 100 Moola, you can try to mint an NFT.

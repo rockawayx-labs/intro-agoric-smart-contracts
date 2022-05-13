@@ -6,16 +6,7 @@ import { E } from '@endo/eventual-send';
 import bundleSource from '@endo/bundle-source';
 
 import { pursePetnames } from './petnames.js';
-// import minterConstants from '../react-ui/src/moolaMinterConstants.js'
-
-const minterConstants = {
-    "CONTRACT_NAME": "moolaMinter",
-    "INSTALLATION_BOARD_ID": "board02314",
-    "INSTANCE_BOARD_ID": "board05815",
-    "TOKEN_ISSUER_BOARD_ID": "board04312",
-    "TOKEN_BRAND_BOARD_ID": "board00613",
-    "INVITE_BRAND_BOARD_ID": "board0223"
-}
+import minterConstants from '../react-ui/src/moolaMinterConstants.mjs'
 
 // This script takes our contract code, installs it on Zoe, and makes
 // the installation publicly available. Our backend API script will

@@ -44,8 +44,8 @@ const installBundle = async (pathResolve, zoe, board) => {
 
     const moolaIssuer = await E(board).getValue(minterConstants.TOKEN_ISSUER_BOARD_ID)
 
-    const { creatorFacet, instance } = await E(zoe).startInstance(installation, harden({ Tokens: moolaIssuer }), { Moola: moolaIssuer })
-    const nftIssuer = await E(creatorFacet).getNFTIssuer()
+    const { publicFacet, instance } = await E(zoe).startInstance(installation, harden({ Tokens: moolaIssuer }), { Moola: moolaIssuer })
+    const nftIssuer = await E(publicFacet).getNFTIssuer()
     const NFT_ISSUER_BOARD_ID = await E(board).getId(nftIssuer)
     const NFT_BRAND_BOARD_ID = await E(board).getId(await E(nftIssuer).getBrand())
 

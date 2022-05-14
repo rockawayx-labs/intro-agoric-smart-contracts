@@ -28,17 +28,22 @@ Test whether you can run `agoric --version` and get a version number like `0.15.
 
 Agoric install performs the necessary installation steps so we can run our examples.
 
-## Follow the workshop
+## Workshop exercises
 
-Load up the [workshop presentation](https://docs.google.com/presentation/d/1Rr01wNR6JzDrfi5FKGGHHk3NqbT6LdhB8HUK21uKT3Q/edit?usp=sharing), which will kick off the workshop. I will explain why Agoric has a strong value proposition and why I think writing smart contracts on Agoric is safer from the get-go.
+Load up the [workshop presentation](https://docs.google.com/presentation/d/1Rr01wNR6JzDrfi5FKGGHHk3NqbT6LdhB8HUK21uKT3Q/edit?usp=sharing), which will kick off the workshop. We will explain why Agoric has a strong value proposition and why I think writing smart contracts on Agoric is safer from the get-go.
+
+Each exercise has the working script and the solutions script. It's benefical to type out the exercises but the solutions are there for reference whenever needed.
+
+We recommend running a terminal inside VS Code and having Ava watching your files and re-running tests to obtain immediate feedback.
 
 ## contract-0
+Exercise focus: [ERTP](https://agoric.com/documentation/getting-started/ertp-introduction.html)
 
-In the `contract-0` directory, we focus on test driven development (there is no contract to build) to learn about issuers, amounts, brands, mints, payments and purses. These are the Lego blocks for creating, describing and transferring value.
+New concepts: Issuers, Brands, Amounts, Payments, Purses, test-driven contract development
 
-Relevant documentation: [ERTP](https://agoric.com/documentation/getting-started/ertp-introduction.html)
+Synopsis: In the `contract-0` directory, we focus on test driven development (there is no contract to build) to learn about issuers, amounts, brands, mints, payments and purses. These are the Lego blocks for creating, describing and transferring value.
 
-To begin working:
+How to start:
 `cd contract-0`
 `npx ava test/test-contract.js -w`
 
@@ -46,37 +51,31 @@ Do this either inside the terminal.
 
 ## contract-1
 
-`contract-1` is is our first contract that has real functionality - minting Moolas (imaginary fungible asset).
+Exercise focus: [ERTP](https://agoric.com/documentation/getting-started/ertp-introduction.html) [Zoe](https://agoric.com/documentation/zoe/guide/)  [Zoe Contract Facet (zcf)](https://agoric.com/documentation/zoe/api/zoe-contract-facet.html)
 
-1. First we teach to contract to be polite and say 'Hi!'.
-2. We show how **invitations** work and extend an invitation to ourselves.
-3. We redeem the invitation by sending an **offer** in which we ask for Moolas to be minted for us.
-4. We extract the payment and deposit it into our purse.
+New concepts: Invitations, Seats, Offers, (creator, public) Facets
 
-Relevant documentation: [Zoe](https://agoric.com/documentation/getting-started/intro-zoe.html)
+Synopsis: `contract-1` is is our first contract that has real functionality - minting Moolas (imaginary fungible asset). We show how to define regular functions that can be called on the contract. Then we focus on the contract interaction lifecycle: invitation -> offer -> seat -> offer result. We then extract a payment from the offer result and deposit it in a purse.
 
-To begin working:
+How to start:
 `cd contract-1`
 `npx ava test/test-contract.js -w`
 
-Do this either inside the terminal.
-
 ## contract-2
 
-`contract-2` allows the creator to mint NFTs in exchange for Moolas.
+Exercise focus: [Zoe](https://agoric.com/documentation/zoe/guide/)
 
-1. We show how a smart contract can be informed about which currency it should know about and accept.
-2. We then write a function which allows the user to mint an `Awesomez` NFT in return for a payment of Moolas.
-3. We check whether we have received the right thing in our test.
-4. We test **offer safety** in a test by introducing a bug into the contract and show that Zoe stops the exchange.
+New concepts: contract terms, IssuerKeywordRecord
 
-To begin working:
+Synopsis: `contract-2` allows the creator to mint NFTs in exchange for Moolas. We show how to setup a contract to *know* about issuers. The contract we will write here accepts `Moola` and mints NFTs using an issuer `Awesomez` that it alone holds. We then run through the offer lifecycle and finally we introduce a bug into the contract and show that Zoe steps in to protect the user -- this **offer safety** in action.
+
+How to start:
 `cd contract-2`
 `npx ava test/test-contract.js -w`
 
 ## react-ui
 
-`react-ui` is a dApp that binds together `contract-1` and `contract-2` so that the former mints Moola tokens which are accepted by the latter.
+`react-ui` is a dApp that binds together `contract-1` and `contract-2` so that the former mints `Moola` tokens which are accepted by the latter.
 
 To begin working move to the root of the repository and:
 `agoric start --reset`

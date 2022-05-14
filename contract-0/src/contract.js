@@ -1,3 +1,4 @@
+// @ts-check
 
 // This is a minimalistic contract which does absolutely nothing.
 // Every contract must have a `start` function, which accepts zcf

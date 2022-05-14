@@ -52,6 +52,7 @@ Do this either inside the terminal.
 ## contract-1
 
 Exercise focus: [ERTP](https://agoric.com/documentation/getting-started/ertp-introduction.html) [Zoe](https://agoric.com/documentation/zoe/guide/)  [Zoe Contract Facet (zcf)](https://agoric.com/documentation/zoe/api/zoe-contract-facet.html)
+[Remotable objects](https://agoric.com/documentation/guides/js-programming/far.html)
 
 New concepts: Invitations, Seats, Offers, (creator, public) Facets
 

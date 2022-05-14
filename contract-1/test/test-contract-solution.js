@@ -11,6 +11,7 @@ import { makeZoeKit } from '@agoric/zoe';
 
 import { AmountMath } from '@agoric/ertp';
 
+// check if our installation bundle is what is indeed installed
 test('deploy contract for testing', async (t) => {
   const { admin: fakeVatAdmin } = makeFakeVatAdmin()
   const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
@@ -22,6 +23,11 @@ test('deploy contract for testing', async (t) => {
 })
 
 
+// 1. write a sayHi function which returns 'hi!' into the contract.js file
+// 2. install the contract as above
+// 3. instantiate the contract using startInstance
+// 4. extract the sayHi function test from the creatorFacet
+// 5. call the function and verify the returned value is 'hi!' using t.is
 test('just say hello', async (t) => {
   const { admin: fakeVatAdmin } = makeFakeVatAdmin()
   const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
@@ -38,39 +44,12 @@ test('just say hello', async (t) => {
 })
 
 
-test('mint me 20 Moola', async (t) => {
-  const { admin: fakeVatAdmin } = makeFakeVatAdmin()
-  const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
-
-  const helloBundle = await bundleSource('./src/contract-solution.js');
-  const helloInstallation = await E(zoe).install(helloBundle)
-
-  t.is(await E(helloInstallation).getBundle(), helloBundle)
-
-  const { creatorFacet } =
-    await E(zoe).startInstance(helloInstallation, {})
-
-  const { makeMintInvitation, getIssuer } = creatorFacet
-
-  const mintInvitation = makeMintInvitation()
-
-  t.truthy((await E(zoe).getInvitationIssuer()).isLive(mintInvitation))
-  const issuer = await getIssuer()
-
-  const mintProposal = harden({
-    want: { Moola: AmountMath.make(issuer.getBrand(), 20n) }
-  })
-
-  const mySeat = await E(zoe).offer(mintInvitation, mintProposal)
-  const offerResult = await E(mySeat).getOfferResult()
-
-  t.is(offerResult, 'Here is some moola!')
-  const moolaPayout = await E(mySeat).getPayout('Moola')
-
-  const moola20 = AmountMath.make(issuer.getBrand(), 20n)
-  t.deepEqual(await issuer.getAmountOf(moolaPayout), moola20)
-})
-
+// 1. write a sayHello function as an offer handler in contract.js, return an invitation in creatorFacet
+// 2. install the contract as above
+// 3. instantiate the contract using startInstance
+// 4. extract the inviteHello function test from the creatorFacet
+// 5. use the invitation by sending an (empty) offer to the contract
+// 6. the contract should reply by saying 'Hello!', use getOfferResult to check this
 test('mint me 80 moola', async (t) => {
   const { admin: fakeVatAdmin } = makeFakeVatAdmin()
   const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
@@ -81,9 +60,9 @@ test('mint me 80 moola', async (t) => {
   t.is(await E(helloInstallation).getBundle(), helloBundle)
 
   const { creatorFacet } = await E(zoe).startInstance(helloInstallation, {})
-  const { makeMintSomeInvitation, getIssuer } = creatorFacet
+  const { makeMintInvitation, getIssuer } = creatorFacet
 
-  const mintSomeInvitation = makeMintSomeInvitation()
+  const mintSomeInvitation = makeMintInvitation()
 
   const issuer = getIssuer()
 
@@ -106,6 +85,7 @@ test('mint me 80 moola', async (t) => {
 })
 
 
+// repeat previous exercise to check that the contract refuses to mint the amount and a zero payment is extracted
 test('mint me 5000 moola', async (t) => {
   const { admin: fakeVatAdmin } = makeFakeVatAdmin()
   const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
@@ -116,9 +96,9 @@ test('mint me 5000 moola', async (t) => {
   t.is(await E(helloInstallation).getBundle(), helloBundle)
 
   const { creatorFacet } = await E(zoe).startInstance(helloInstallation, {})
-  const { makeMintSomeInvitation, getIssuer } = creatorFacet
+  const { makeMintInvitation, getIssuer } = creatorFacet
 
-  const mintSomeInvitation = makeMintSomeInvitation()
+  const mintSomeInvitation = makeMintInvitation()
 
   const issuer = getIssuer()
 
@@ -128,8 +108,8 @@ test('mint me 5000 moola', async (t) => {
     want: { Tokens: requestedAmount }
   })
   const mySeat = await E(zoe).offer(mintSomeInvitation, mintProposal)
-  const offerResult = await E(mySeat).getOfferResult()
 
+  const offerResult = await E(mySeat).getOfferResult()
   t.is('You are asking too much', offerResult)
 
   const tokensReceived = await E(mySeat).getPayout('Tokens')

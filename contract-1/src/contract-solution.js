@@ -1,4 +1,5 @@
-// Eventually will be importable from '@agoric/zoe-contract-support'
+// @ts-check
+
 import { Far } from '@endo/marshal'
 import { AssetKind, AmountMath } from '@agoric/ertp'
 import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js'
@@ -19,15 +20,7 @@ const start = async (zcf) => {
         return 'Hello!'
     }
 
-    // @type OfferHandler
-    const mint20Moola = (seat) => {
-        const amount = AmountMath.make(moolaBrand, 20n)
-        moolaMint.mintGains({ Moola: amount }, seat);
-        seat.exit()
-        return 'Here is some moola!'
-    }
-
-    const mintSomeMoola = (seat) => {
+    const mintMoola = (seat) => {
         assertProposalShape(seat, {
             want: { Tokens: null },
         })
@@ -42,24 +35,24 @@ const start = async (zcf) => {
         return 'Here you go'
     }
 
+    // only accessible to the creator who instantiates the contract
     const creatorFacet = {
         sayHi: () => 'hi!',
         makeHelloInvitation: () => zcf.makeInvitation(sayHello, 'sayHello'),
-        makeMintInvitation: () => zcf.makeInvitation(
-            mint20Moola,
-            'mintOffer',
-        ),
-        makeMintSomeInvitation: () => zcf.makeInvitation(mintSomeMoola, 'mintSome'),
+        makeMintInvitation: () => zcf.makeInvitation(mintMoola, 'mintSome'),
         getIssuer: () => issuer,
     }
 
+    // accessible to anyone
     const publicFacet = {
-        makeMintSomeInvitation: () => zcf.makeInvitation(mintSomeMoola, 'mintSome'),
+        makeMintInvitation: () => zcf.makeInvitation(mintMoola, 'mintSome'),
         getIssuer: () => issuer,
     }
 
     // in the solution, we also provide a public Facet that is available
     // to anyone holding a reference to the contract itself. We thus allow anyone to mint themselves money
+    // Far() is necessary when we deploy the contract to our local testnet and want to access it from a dApp
+    // Docs: https://agoric.com/documentation/guides/js-programming/far.html
     return harden({ creatorFacet: Far('creatorFacet', creatorFacet), publicFacet: Far('publicFacet', publicFacet) });
 };
 

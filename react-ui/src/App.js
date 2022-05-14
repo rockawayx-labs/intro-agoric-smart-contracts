@@ -59,7 +59,7 @@ const MintingForm = (props) => {
       dappContext: true,
     }
 
-    console.log('adding offer to wallet')
+    console.log('adding offer to mint Moolas')
     const newOffer = await E(walletBridge).addOffer(offerConfig)
     setOffers([newOffer, ...offers])
   }
@@ -88,7 +88,8 @@ const MintingForm = (props) => {
             value: harden([nftName])
           }
         }
-      }
+      },
+      dappContext: true,
     }
 
     console.log('adding offer to buy NFT')

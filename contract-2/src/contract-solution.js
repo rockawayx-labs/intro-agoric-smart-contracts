@@ -10,6 +10,7 @@ import { Far } from '@endo/marshal';
  * 1. mint some NFTs
  * 2. sell the NFTs for moolas
  */
+// @param {ZCF} zcf
 const start = async (zcf) => {
     assertIssuerKeywords(zcf, ['Tokens'])
     const { Moola: moolaIssuer } = zcf.getTerms()
@@ -19,31 +20,24 @@ const start = async (zcf) => {
 
     const { zcfSeat: nftSeat } = zcf.makeEmptySeatKit()
 
-    const mintNFTs = (seat) => {
-        assertProposalShape(seat, {
+    const mintNFTs = async (userSeat) => {
+        assertProposalShape(userSeat, {
             want: { Awesomez: null },
             give: { Tokens: null }
         })
 
-        const { want: userWants, give: userGives } = seat.getProposal()
+        const { want: userWants, give: userGives } = userSeat.getProposal()
 
-        if (AmountMath.isGTE(AmountMath.make(moolaIssuer.getBrand(), 99n), userGives.Tokens)) {
-            seat.fail()
-            return 'Your offer is not good enough'
-        }
+        const minCost = AmountMath.make(moolaIssuer.getBrand(), 100n)
+        assert(AmountMath.isGTE(userGives.Tokens, minCost), 'Your offer is not good enough')
 
         nftMint.mintGains(userWants, nftSeat)
 
-        nftSeat.incrementBy(userGives)
-        nftSeat.decrementBy(userWants)
+        nftSeat.incrementBy(userSeat.decrementBy(userGives))
+        userSeat.incrementBy(nftSeat.decrementBy(userWants))
+        zcf.reallocate(nftSeat, userSeat)
 
-        seat.incrementBy(userWants)
-        seat.decrementBy(userGives)
-
-        zcf.reallocate(nftSeat, seat)
-
-        seat.exit()
-
+        userSeat.exit()
         return 'You minted an NFT!'
     }
 

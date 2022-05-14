@@ -23,10 +23,10 @@ test('I want to buy an NFT', async (t) => {
 
     const { issuer: moolaIssuer, mint: moolaMint } = makeIssuerKit('Moola')
 
-    const { creatorFacet } =
+    const { publicFacet } =
         await E(zoe).startInstance(helloInstallation, harden({ Tokens: moolaIssuer }), { Moola: moolaIssuer })
 
-    const { makeMintNFTsInvitation, getNFTIssuer } = creatorFacet
+    const { makeMintNFTsInvitation, getNFTIssuer } = publicFacet
 
     // prepare our NFT outside the contract
     const nftIssuer = getNFTIssuer()
@@ -62,10 +62,10 @@ test('I want to buy an NFT for the WRONG currency', async (t) => {
 
     const { issuer: moolaIssuer } = makeIssuerKit('Moola')
 
-    const { creatorFacet } =
+    const { publicFacet } =
         await E(zoe).startInstance(helloInstallation, harden({ Tokens: moolaIssuer }), { Moola: moolaIssuer })
 
-    const { makeMintNFTsInvitation, getNFTIssuer } = creatorFacet
+    const { makeMintNFTsInvitation, getNFTIssuer } = publicFacet
 
     const { issuer: otherIssuer, mint: otherMint } = makeIssuerKit('Other')
 

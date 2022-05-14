@@ -25,19 +25,21 @@ const start = async (zcf) => {
             give: { Tokens: null }
         })
 
-        const { want, give } = seat.getProposal()
+        const { want: userWants, give: userGives } = seat.getProposal()
 
-        if (AmountMath.isGTE(AmountMath.make(moolaIssuer.getBrand(), 99n), give.Tokens)) {
+        if (AmountMath.isGTE(AmountMath.make(moolaIssuer.getBrand(), 99n), userGives.Tokens)) {
             seat.fail()
             return 'Your offer is not good enough'
         }
 
-        nftMint.mintGains(want, nftSeat)
+        nftMint.mintGains(userWants, nftSeat)
 
-        nftSeat.incrementBy(give)
-        nftSeat.decrementBy(want)
-        seat.incrementBy(want)
-        seat.decrementBy(give)
+        nftSeat.incrementBy(userGives)
+        nftSeat.decrementBy(userWants)
+
+        seat.incrementBy(userWants)
+        seat.decrementBy(userGives)
+
         zcf.reallocate(nftSeat, seat)
 
         seat.exit()
@@ -48,8 +50,6 @@ const start = async (zcf) => {
     const creatorFacet = {
         // getBalance solution is secret :)
         // getProfit solution is secret :)
-        makeMintNFTsInvitation: () => zcf.makeInvitation(mintNFTs, 'mintNFTs'),
-        getNFTIssuer: () => nftIssuer,
     }
 
     // we allow the public facet minting functionality as well

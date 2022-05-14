@@ -43,8 +43,8 @@ const MintingForm = (props) => {
     console.log('mintMoola handler running')
     const moolaInstance = await E(board).getValue(moolaMinterConstants.INSTANCE_BOARD_ID)
     const moolaPublicFacet = await E(zoe).getPublicFacet(moolaInstance)
-
     const mintInvitation = await E(moolaPublicFacet).makeMintInvitation()
+
     const offerConfig = {
       id: `${Date.now()}`,
       invitation: mintInvitation,
@@ -70,7 +70,7 @@ const MintingForm = (props) => {
     const mintInvitation = await E(nftPublicFacet).makeMintNFTsInvitation()
     const nftIssuer = await E(nftPublicFacet).getNFTIssuer()
     const nftBrand = await E(nftIssuer).getBrand()
-    console.log(`have issuer ${nftIssuer} brand ${nftBrand} and petname ${awesomezPursePetname} and nftname is ${nftName}`)
+    console.log(`have issuer ${nftIssuer} brand ${nftBrand} petname ${awesomezPursePetname}`)
 
     const offerConfig = {
       id: `${Date.now()}`,
@@ -127,9 +127,12 @@ const MyWalletConnection = (props) => {
     const board = await E(walletBridge).getBoard()
 
     E(walletBridge).suggestIssuer('Moola', moolaMinterConstants.TOKEN_ISSUER_BOARD_ID);
+    E(walletBridge).suggestInstallation('Moola installation', moolaMinterConstants.INSTALLATION_BOARD_ID);
+    E(walletBridge).suggestInstance('Moola Instance', moolaMinterConstants.INSTANCE_BOARD_ID);
+
     E(walletBridge).suggestIssuer('Awesomez', nftMinterConstants.NFT_ISSUER_BOARD_ID)
-    //E(walletBridge).suggestInstallation('Installation', moolaMinterConstants.INSTALLATION_BOARD_ID);
-    //E(walletBridge).suggestInstance('Instance', moolaMinterConstants.INSTANCE_BOARD_ID);
+    E(walletBridge).suggestInstallation('Awesomez installation', nftMinterConstants.INSTALLATION_BOARD_ID);
+    E(walletBridge).suggestInstance('Awesomez instance', nftMinterConstants.INSTANCE_BOARD_ID);
 
     setAgoricInterface({ zoe, board, walletBridge })
 

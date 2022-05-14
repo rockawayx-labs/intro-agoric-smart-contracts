@@ -8,8 +8,6 @@ import moolaMinterConstants from './moolaMinterConstants.mjs'
 import nftMinterConstants from './nftMinterConstants'
 
 import './App.css';
-import { AmountMath } from '../../../agoric-sdk/node_modules/@agoric/ertp/src/amountMath';
-
 
 // Create a wrapper for agoric-wallet-connection that is specific to
 // the app's instance of React.
@@ -46,7 +44,7 @@ const MintingForm = (props) => {
     const moolaInstance = await E(board).getValue(moolaMinterConstants.INSTANCE_BOARD_ID)
     const moolaPublicFacet = await E(zoe).getPublicFacet(moolaInstance)
 
-    const mintInvitation = await E(moolaPublicFacet).makeMintSomeInvitation()
+    const mintInvitation = await E(moolaPublicFacet).makeMintInvitation()
     const offerConfig = {
       id: `${Date.now()}`,
       invitation: mintInvitation,
@@ -121,7 +119,7 @@ const MyWalletConnection = (props) => {
   const setupWalletConnection = async (walletConnection) => {
     // This is one of the only methods that the wallet connection facet allows.
     // It connects asynchronously, but you can use promise pipelining immediately.
-    const walletBridge = E(walletConnection).getScopedBridge('Contract-2');
+    const walletBridge = E(walletConnection).getScopedBridge('dApp-NFTs');
 
     // You should reconstruct all state here.
     const zoe = await E(walletBridge).getZoe();

@@ -141,7 +141,7 @@ const deployContract = async (homePromise, { pathResolve }) => {
         INVITE_BRAND_BOARD_ID
     };
     const defaultsFile = pathResolve(
-        `./react-ui/src/moolaMinterConstants.js`,
+        `./react-ui/src/moolaMinterConstants.mjs`,
     );
     console.log('writing', defaultsFile);
     const defaultsContents = `\

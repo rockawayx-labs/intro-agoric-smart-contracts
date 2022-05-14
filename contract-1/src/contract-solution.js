@@ -25,11 +25,8 @@ const start = async (zcf) => {
             want: { Tokens: null },
         })
         const { want } = seat.getProposal()
-        const amount = want.Tokens
-        if (AmountMath.isGTE(amount, AmountMath.make(moolaBrand, 1000n))) {
-            seat.fail()
-            return 'You are asking too much'
-        }
+        assert(AmountMath.isGTE(AmountMath.make(moolaBrand, 1000n), want.Tokens), 'You ask too much!')
+
         moolaMint.mintGains(want, seat)
         seat.exit()
         return 'Here you go'

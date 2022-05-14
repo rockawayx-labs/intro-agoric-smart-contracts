@@ -43,6 +43,29 @@ test('just say hello', async (t) => {
   t.is('hi!', sayHi())
 })
 
+// 1. write a sayHello function as an offer handler in contract.js, return an invitation in creatorFacet
+// 2. install the contract as above
+// 3. instantiate the contract using startInstance
+// 4. extract the inviteHello function test from the creatorFacet
+// 5. use the invitation by sending an (empty) offer to the contract
+// 6. the contract should reply by saying 'Hello!', use getOfferResult to check this
+test('I invite you to say hello', async (t) => {
+  const { admin: fakeVatAdmin } = makeFakeVatAdmin()
+  const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
+  const helloBundle = await bundleSource('./src/contract.js');
+  const helloInstallation = await E(zoe).install(helloBundle)
+
+  const { creatorFacet } = await E(zoe).startInstance(helloInstallation)
+  const { makeHelloInvitation } = creatorFacet
+
+  const helloInvitation = makeHelloInvitation()
+
+  const seat = zoe.offer(helloInvitation, harden({}))
+  const offerResult = await E(seat).getOfferResult()
+
+  t.is(offerResult, 'Hello!')
+})
+
 
 // 1. write a sayHello function as an offer handler in contract.js, return an invitation in creatorFacet
 // 2. install the contract as above
@@ -85,7 +108,7 @@ test('mint me 80 moola', async (t) => {
 })
 
 
-// repeat previous exercise to check that the contract refuses to mint the amount and a zero payment is extracted
+// repeat previous exercise to check that the contract refuses to mint and an error is thrown from the assertion
 test('mint me 5000 moola', async (t) => {
   const { admin: fakeVatAdmin } = makeFakeVatAdmin()
   const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
@@ -109,9 +132,5 @@ test('mint me 5000 moola', async (t) => {
   })
   const mySeat = await E(zoe).offer(mintSomeInvitation, mintProposal)
 
-  const offerResult = await E(mySeat).getOfferResult()
-  t.is('You are asking too much', offerResult)
-
-  const tokensReceived = await E(mySeat).getPayout('Tokens')
-  t.deepEqual(AmountMath.makeEmpty(issuer.getBrand()), await issuer.getAmountOf(tokensReceived))
+  await t.throwsAsync(E(mySeat).getOfferResult(), undefined)
 })

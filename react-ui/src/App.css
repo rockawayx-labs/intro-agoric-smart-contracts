@@ -2,37 +2,128 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.Logo {
+  max-width: 340px;
+  margin-bottom: 44px;
+  padding: 0 40px 26px 40px;
+  border-bottom: 1px solid #ebebf0;
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: white;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: 16px;
+  padding-top: 50px;
+}
+
+.App button {
+  height: 40px;
+  width: 140px;
+  background-color: #d73252;
   color: white;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  display: inline-block;
 }
 
-.App-link {
-  color: #61dafb;
+.App button:hover {
+  background-color: #c72242;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.App button:active {
+  background-color: #a91734;
+
+}
+
+#Interface-activation {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#Interface-activation p {
+  margin: 0 0 0 14px;
+  font-size: 18px;
+  color: #637189;
+}
+
+input[type=text], select {
+  height: 40px;
+  width: 80px;
+  display: inline-block;
+  border: 1px solid #d9d9ef;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-right: 12px;
+  padding: 4px 10px;
+  text-align: right;
+}
+
+label {
+  color: #637189;
+  font-size: 16px;
+  margin-right: 12px;
+}
+
+#Mint-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#Mint-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+#Session-info {
+  min-width: 200px;
+  background-color: #ebebf0;
+  color: #637189;
+  padding: 8px 20px 8px 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  text-align: left;
+}
+
+#Session-info div {
+  margin: 10px 0;
+}
+
+.Loader {
+  border: 3px solid #c72242;
+  border-radius: 50%;
+  border-top: 3px solid white;
+  width: 20px;
+  height: 20px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+agoric-wallet-connection {
+  display:none;
+}
+
+#Mint-nft-div {
+  display: none;
 }

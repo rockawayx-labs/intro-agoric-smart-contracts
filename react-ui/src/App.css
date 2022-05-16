@@ -1,12 +1,13 @@
 .App {
   text-align: center;
+  color: #002237;
 }
 
 .Logo {
   max-width: 340px;
-  margin-bottom: 44px;
   padding: 0 40px 26px 40px;
   border-bottom: 1px solid #ebebf0;
+  margin-bottom: 44px;
 }
 
 .App-header {
@@ -37,7 +38,6 @@
 
 .App button:active {
   background-color: #a91734;
-
 }
 
 #Interface-activation {
@@ -52,17 +52,40 @@
   color: #637189;
 }
 
-input[type=text],
+input[type='text'],
 select {
   height: 40px;
-  width: 80px;
   display: inline-block;
   border: 1px solid #d9d9ef;
   border-radius: 4px;
   box-sizing: border-box;
   margin-right: 12px;
   padding: 4px 10px;
-  text-align: right;
+  text-align: left;
+}
+
+#mintInput {
+  width: 80px;
+}
+
+#nftInput {
+  width: 122px;
+}
+
+::placeholder {
+  color: #94a2bb;
+  opacity: 1; /* Firefox */
+  font-size: 14px;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color: #94a2bb;
+ font-size: 14px;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+ color: #94a2bb;
+ font-size: 14px;
 }
 
 label {
@@ -81,9 +104,19 @@ label {
 #Mint-wrapper {
   display: flex;
   flex-direction: row;
-  margin-bottom: 44px;
   align-items: center;
   justify-content: center;
+}
+
+.Mint-form-input-row {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.Mint-form-input-row:first-child {
+  margin-bottom: 20px;
 }
 
 #Session-info {
@@ -94,6 +127,7 @@ label {
   border-radius: 8px;
   font-size: 16px;
   text-align: left;
+  margin-top: 44px;
 }
 
 #Session-info div {
@@ -134,8 +168,4 @@ label {
 
 agoric-wallet-connection {
   display: none;
-}
-
-#Mint-nft-div {
-  /*  display: none; */
 }

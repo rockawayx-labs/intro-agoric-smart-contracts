@@ -54,7 +54,7 @@ const MintingForm = (props) => {
       <div id="Interface-activation">
         <div className="Loader" />
         <p>
-          Waiting for Agoric interface to be activated (click <b>Approve</b> in
+          Waiting for Agoric interface to be activated (click <b>Accept</b> in
           your Agoric wallet)...
         </p>
       </div>
@@ -129,24 +129,28 @@ const MintingForm = (props) => {
 
   return (
     <div id="Mint-form">
-      <div id="Mint-wrapper">
+      <div className="Mint-form-input-row">
         <label>Amount of Moola to mint:</label>
         <input
           type="text"
           pattern="[0-9]*"
+          id="mintInput"
           onChange={(ev) => setAmount(parseInt(ev.target.value) || 0)}
           value={amount}
         />
         <button onClick={() => mintSomeMoola()}>Get some Moola!</button>
       </div>
-      <div id="Mint-nft-div">
+      <div className="Mint-form-input-row">
+      <label>Choose NFT Name:</label>
         <input
           type="text"
+          id="nftInput"
+          placeholder="Awesome NFT"
           onChange={(ev) => setNftName(ev.target.value)}
           value={nftName}
         />
         <button onClick={nftName !== '' ? () => mintNft() : undefined}>
-          Mint the Nft
+          Mint the NFT!
         </button>
       </div>
       <OfferMonitor offers={offers} walletOffers={walletOffers} />

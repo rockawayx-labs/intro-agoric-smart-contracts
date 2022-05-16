@@ -71,7 +71,7 @@ const MintingForm = (props) => {
     const moolaPublicFacet = await E(zoe).getPublicFacet(moolaInstance);
     const mintInvitation = await E(moolaPublicFacet).makeMintInvitation();
 
-    const offerConfig = {
+    const offerConfig = harden({
       id: `${Date.now()}`,
       invitation: mintInvitation,
       proposalTemplate: {
@@ -83,7 +83,7 @@ const MintingForm = (props) => {
         },
       },
       dappContext: true,
-    };
+    })
 
     console.log('adding offer to mint Moolas');
     const newOffer = await E(walletBridge).addOffer(offerConfig);
@@ -102,7 +102,7 @@ const MintingForm = (props) => {
       `have issuer ${nftIssuer} brand ${nftBrand} petname ${awesomezPursePetname}`,
     );
 
-    const offerConfig = {
+    const offerConfig = harden({
       id: `${Date.now()}`,
       invitation: mintInvitation,
       proposalTemplate: {
@@ -115,12 +115,12 @@ const MintingForm = (props) => {
         want: {
           Awesomez: {
             pursePetname: awesomezPursePetname,
-            value: harden([nftName]),
+            value: [nftName],
           },
         },
       },
       dappContext: true,
-    };
+    });
 
     console.log('adding offer to buy NFT');
     const newOffer = await E(walletBridge).addOffer(offerConfig);

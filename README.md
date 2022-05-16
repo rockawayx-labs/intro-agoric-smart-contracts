@@ -76,6 +76,8 @@ How to start:
 
 ## react-ui
 
+Exercise focus: [Board](https://agoric.com/documentation/repl/board.html), [Wallet](https://agoric.com/documentation/guides/wallet/)
+
 `react-ui` is a dApp that binds together `contract-1` and `contract-2` so that the former mints `Moola` tokens which are accepted by the latter.
 
 To begin working move to the root of the repository and:

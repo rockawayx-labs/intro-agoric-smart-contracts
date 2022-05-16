@@ -1,6 +1,9 @@
+
+// @ts-check
 // Eventually will be importable from '@agoric/zoe-contract-support'
 import { AssetKind, AmountMath } from '@agoric/ertp'
 import { assertProposalShape, assertIssuerKeywords } from '@agoric/zoe/src/contractSupport/index.js'
+import { E } from '@endo/eventual-send';
 import { Far } from '@endo/marshal';
 
 
@@ -28,7 +31,9 @@ const start = async (zcf) => {
 
         const { want: userWants, give: userGives } = userSeat.getProposal()
 
-        const minCost = AmountMath.make(moolaIssuer.getBrand(), 100n)
+        const brand = await E(moolaIssuer).getBrand()
+        //const brand = moolaIssuer.getBrand()
+        const minCost = AmountMath.make(brand, 100n)
         assert(AmountMath.isGTE(userGives.Tokens, minCost), 'Your offer is not good enough')
 
         nftMint.mintGains(userWants, nftSeat)

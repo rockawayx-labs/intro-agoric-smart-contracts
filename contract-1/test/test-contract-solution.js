@@ -17,9 +17,9 @@ test('deploy contract for testing', async (t) => {
   const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
 
   const helloBundle = await bundleSource('./src/contract-solution.js');
-  const helloInstallation = await E(zoe).install(helloBundle)
+  const moolaMinterInstallation = await E(zoe).install(helloBundle)
 
-  t.is(await E(helloInstallation).getBundle(), helloBundle)
+  t.is(await E(moolaMinterInstallation).getBundle(), helloBundle)
 })
 
 
@@ -33,29 +33,29 @@ test('just say hello', async (t) => {
   const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
 
   const helloBundle = await bundleSource('./src/contract-solution.js');
-  const helloInstallation = await E(zoe).install(helloBundle)
+  const moolaMinterInstallation = await E(zoe).install(helloBundle)
 
   const { creatorFacet } =
-    await E(zoe).startInstance(helloInstallation, {})
+    await E(zoe).startInstance(moolaMinterInstallation, {})
 
   const { sayHi } = creatorFacet
 
   t.is('hi!', sayHi())
 })
 
-// 1. write a sayHello function as an offer handler in contract.js, return an invitation in creatorFacet
+// 1. write a sayHello function as an offer handler in contract.js, return an invitation in creatorFacet via makeHelloInvitation() function
 // 2. install the contract as above
 // 3. instantiate the contract using startInstance
-// 4. extract the inviteHello function test from the creatorFacet
+// 4. extract the makeHelloInvitation function test from the creatorFacet
 // 5. use the invitation by sending an (empty) offer to the contract
 // 6. the contract should reply by saying 'Hello!', use getOfferResult to check this
 test('I invite you to say hello', async (t) => {
   const { admin: fakeVatAdmin } = makeFakeVatAdmin()
   const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
-  const helloBundle = await bundleSource('./src/contract.js');
-  const helloInstallation = await E(zoe).install(helloBundle)
+  const helloBundle = await bundleSource('./src/contract-solution.js');
+  const moolaMinterInstallation = await E(zoe).install(helloBundle)
 
-  const { creatorFacet } = await E(zoe).startInstance(helloInstallation)
+  const { creatorFacet } = await E(zoe).startInstance(moolaMinterInstallation)
   const { makeHelloInvitation } = creatorFacet
 
   const helloInvitation = makeHelloInvitation()
@@ -78,12 +78,12 @@ test('mint me 80 moola', async (t) => {
   const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
 
   const helloBundle = await bundleSource('./src/contract-solution.js')
-  const helloInstallation = await E(zoe).install(helloBundle)
+  const moolaMinterInstallation = await E(zoe).install(helloBundle)
 
-  t.is(await E(helloInstallation).getBundle(), helloBundle)
+  t.is(await E(moolaMinterInstallation).getBundle(), helloBundle)
 
-  const { creatorFacet } = await E(zoe).startInstance(helloInstallation, {})
-  const { makeMintInvitation, getIssuer } = creatorFacet
+  const { publicFacet } = await E(zoe).startInstance(moolaMinterInstallation, {})
+  const { makeMintInvitation, getIssuer } = publicFacet
 
   const mintSomeInvitation = makeMintInvitation()
 
@@ -114,12 +114,12 @@ test('mint me 5000 moola', async (t) => {
   const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
 
   const helloBundle = await bundleSource('./src/contract-solution.js')
-  const helloInstallation = await E(zoe).install(helloBundle)
+  const moolaMinterInstallation = await E(zoe).install(helloBundle)
 
-  t.is(await E(helloInstallation).getBundle(), helloBundle)
+  t.is(await E(moolaMinterInstallation).getBundle(), helloBundle)
 
-  const { creatorFacet } = await E(zoe).startInstance(helloInstallation, {})
-  const { makeMintInvitation, getIssuer } = creatorFacet
+  const { publicFacet } = await E(zoe).startInstance(moolaMinterInstallation, {})
+  const { makeMintInvitation, getIssuer } = publicFacet
 
   const mintSomeInvitation = makeMintInvitation()
 

@@ -31,10 +31,10 @@ test('just say hello', async (t) => {
 })
 
 
-// 1. write a sayHello function as an offer handler in contract.js, return an invitation in creatorFacet
+// 1. write a sayHello function as an offer handler in contract.js, return an invitation in creatorFacet via makeHelloInvitation() function
 // 2. install the contract as above
 // 3. instantiate the contract using startInstance
-// 4. extract the inviteHello function test from the creatorFacet
+// 4. extract the makeHelloInvitation function test from the creatorFacet
 // 5. use the invitation by sending an (empty) offer to the contract
 // 6. the contract should reply by saying 'Hello!', use getOfferResult to check this
 test('I invite you to say hello', async (t) => {

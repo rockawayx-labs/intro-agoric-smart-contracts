@@ -91,23 +91,100 @@ test('I want to buy an NFT for the WRONG currency', async (t) => {
 })
 
 
-/* BONUS PROBLEMS
-
-test('Prove you can mint TWO NFTs for the price of one', async (t) => {
-    // BONUS: this part of the solution is secret, ask for help
-    t.true(false)
-})
-
-
-test('I want to check my balance after NFT mint', async (t) => {
-    // BONUS: this part of the solution is secret, ask for help
-    t.true(false)
-})
-
 
 test('I want to extract profit', async (t) => {
-    // BONUS: this part of the solution is secret, ask for help
-    t.true(false)
+    const { admin: fakeVatAdmin } = makeFakeVatAdmin()
+    const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
+
+    const helloBundle = await bundleSource('./src/contract-solution.js');
+    const nftMinterInstallation = await E(zoe).install(helloBundle)
+
+    t.is(await E(nftMinterInstallation).getBundle(), helloBundle)
+
+    const { issuer: moolaIssuer, mint: moolaMint } = makeIssuerKit('Moola')
+
+    const { creatorFacet, publicFacet } =
+        await E(zoe).startInstance(nftMinterInstallation, harden({ Tokens: moolaIssuer }), { Moola: moolaIssuer })
+
+    const { getBalance, getProfit } = creatorFacet
+    const { makeMintNFTsInvitation, getNFTIssuer } = publicFacet
+
+    // prepare the NFT we want to mint
+    const nftIssuer = getNFTIssuer()
+    t.deepEqual(nftIssuer.getAllegedName(), 'Awesomez')
+    const nftBrand = nftIssuer.getBrand()
+    const moola100 = AmountMath.make(moolaIssuer.getBrand(), 100n)
+
+    for (let i = 0; i < 5; i++) {
+        // we mint the same "NFT" 5 times (sic!)
+        const punk4551 = AmountMath.make(nftBrand, harden(["cryptopunk4551"]))
+
+        const firstPayment = moolaMint.mintPayment(moola100)
+        const nftSeat = await E(zoe).offer(makeMintNFTsInvitation(), harden({
+            want: { Awesomez: punk4551 },
+            give: { Tokens: moola100 }
+        }), { Tokens: firstPayment })
+
+        const nftOfferResult = await E(nftSeat).getOfferResult()
+        t.is(nftOfferResult, 'You minted an NFT!')
+
+        const nftPayout = await E(nftSeat).getPayout('Awesomez')
+        t.deepEqual(await nftIssuer.getAmountOf(nftPayout), punk4551)
+
+        t.false(await moolaIssuer.isLive(firstPayment))
+
+        // we would normally store the minted NFT in a purse
+        // but we won't do that here as depositing the same amount twice for AssetKind.SET
+        // will trigger an error in AmountMath https://github.com/Agoric/agoric-sdk/issues/5384
+    }
+
+    const moola500 = AmountMath.make(moolaIssuer.getBrand(), 500n)
+    const contractBalance = getBalance()
+    t.deepEqual(moola500, contractBalance)
+
+    const profitSeat = await E(zoe).offer((getProfit()), harden({}))
+    t.is('Enjoy your profits!', await E(profitSeat).getOfferResult())
+
+    const profitPayout = await E(profitSeat).getPayout('Tokens')
+    t.deepEqual(AmountMath.make(moolaIssuer.getBrand(), 500n), await moolaIssuer.getAmountOf(profitPayout))
 })
 
-*/
+
+// Note: our contract does not test whether the Amount set we send in only has one member
+// so it's possible to "mint two NFTs" (in this setup)
+test('I want to mint 2 NFTs for the price of one', async (t) => {
+    const { admin: fakeVatAdmin } = makeFakeVatAdmin()
+    const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
+
+    const helloBundle = await bundleSource('./src/contract-solution.js');
+    const helloInstallation = await E(zoe).install(helloBundle)
+
+    t.is(await E(helloInstallation).getBundle(), helloBundle)
+
+    const { issuer: moolaIssuer, mint: moolaMint } = makeIssuerKit('Moola')
+
+    const { creatorFacet, publicFacet } =
+        await E(zoe).startInstance(helloInstallation, harden({ Tokens: moolaIssuer }), { Moola: moolaIssuer })
+
+    const { makeMintNFTsInvitation, getNFTIssuer } = publicFacet
+    const { getBalance } = creatorFacet
+
+    // prepare our NFT outside the contract
+    const nftIssuer = getNFTIssuer()
+    t.deepEqual(nftIssuer.getAllegedName(), 'Awesomez')
+    const nftBrand = nftIssuer.getBrand()
+    const punk4551 = AmountMath.make(nftBrand, harden(["cryptopunk4551", "cryptopunk981"]))
+
+    const moola100 = AmountMath.make(moolaIssuer.getBrand(), 100n)
+    const firstPayment = moolaMint.mintPayment(moola100)
+    const nftSeat = await E(zoe).offer(makeMintNFTsInvitation(), harden({
+        want: { Awesomez: punk4551 },
+        give: { Tokens: moola100 }
+    }), { Tokens: firstPayment })
+
+    const nftOfferResult = await E(nftSeat).getOfferResult()
+    t.is(nftOfferResult, 'You minted an NFT!')
+
+    const balance = getBalance()
+    t.deepEqual(moola100, balance)
+})

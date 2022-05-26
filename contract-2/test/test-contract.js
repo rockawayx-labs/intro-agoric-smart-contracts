@@ -3,6 +3,12 @@
 
 import { test } from '@agoric/zoe/tools/prepare-test-env-ava.js';
 
+import { makeZoeKit } from '@agoric/zoe';
+import { makeFakeVatAdmin } from '@agoric/zoe/tools/fakeVatAdmin.js';
+import bundleSource from '@endo/bundle-source';
+import { E } from '@endo/eventual-send';
+import { AmountMath, makeIssuerKit } from '@agoric/ertp';
+
 // NOTE: tests initially pass to avoid excessive logging from Ava.
 // Remove the t.pass('...') line when you start coding the test
 
@@ -25,18 +31,8 @@ test('I want to buy an NFT for the wrong currency', async (t) => {
     t.pass('write the test!')
 })
 
-/* BONUS PROBLEM section */
-
-/*
-test('I want to check my balance after NFT mint', async (t) => {
-    // BONUS: ask for help
-    t.true(false)
-})
-
-
 test('I want to extract profit', async (t) => {
     // BONUS: this part of the solution is secret, ask for help
-    t.true(false)
+    t.pass('write the test!')
 })
 
-*/

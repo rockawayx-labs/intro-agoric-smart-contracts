@@ -33,24 +33,22 @@ const start = async (zcf) => {
     }
 
     // only accessible to the creator who instantiates the contract
-    const creatorFacet = {
+    const creatorFacet = Far('creatorFacet', {
         sayHi: () => 'hi!',
         makeHelloInvitation: () => zcf.makeInvitation(sayHello, 'sayHello'),
-        makeMintInvitation: () => zcf.makeInvitation(mintMoola, 'mintSome'),
-        getIssuer: () => issuer,
-    }
+    })
 
     // accessible to anyone
-    const publicFacet = {
+    const publicFacet = Far('publicFacet', {
         makeMintInvitation: () => zcf.makeInvitation(mintMoola, 'mintSome'),
         getIssuer: () => issuer,
-    }
+    })
 
     // in the solution, we also provide a public Facet that is available
     // to anyone holding a reference to the contract itself. We thus allow anyone to mint themselves money
     // Far() is necessary when we deploy the contract to our local testnet and want to access it from a dApp
     // Docs: https://agoric.com/documentation/guides/js-programming/far.html
-    return harden({ creatorFacet: Far('creatorFacet', creatorFacet), publicFacet: Far('publicFacet', publicFacet) });
+    return harden({ creatorFacet, publicFacet });
 };
 
 harden(start);

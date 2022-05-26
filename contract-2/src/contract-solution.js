@@ -46,18 +46,26 @@ const start = async (zcf) => {
         return 'You minted an NFT!'
     }
 
-    const creatorFacet = {
-        // getBalance solution is secret :)
-        // getProfit solution is secret :)
+    const getProfit = (seat) => {
+        seat.incrementBy(nftSeat.getCurrentAllocation())
+        nftSeat.decrementBy(nftSeat.getCurrentAllocation())
+        zcf.reallocate(seat, nftSeat)
+        seat.exit()
+        return 'Enjoy your profits!'
     }
+
+    const creatorFacet = Far('creatorFacet', {
+        getBalance: () => nftSeat.getCurrentAllocation().Tokens,
+        getProfit: () => zcf.makeInvitation(getProfit, 'getProfit'),
+    })
 
     // we allow the public facet minting functionality as well
-    const publicFacet = {
+    const publicFacet = Far('publicFacet', {
         makeMintNFTsInvitation: () => zcf.makeInvitation(mintNFTs, 'mintNFTs'),
         getNFTIssuer: () => nftIssuer,
-    }
+    })
 
-    return harden({ creatorFacet: Far('creatorFacet', creatorFacet), publicFacet: Far('publicFacet', publicFacet) });
+    return harden({ creatorFacet, publicFacet });
 };
 
 harden(start);

@@ -140,7 +140,7 @@ const deployContract = async (homePromise, { pathResolve }) => {
         NFT_BRAND_BOARD_ID
     };
     const defaultsFile = pathResolve(
-        `./react-ui/src/nftMinterConstants.js`,
+        `../react-ui/src/nftMinterConstants.js`,
     );
     console.log('writing', defaultsFile);
     const defaultsContents = `\

@@ -41,8 +41,8 @@ const installBundle = async (pathResolve, zoe, board) => {
     const bundle = await bundleSource(pathResolve(`./src/contract-solution.js`));
     const installation = await E(zoe).install(bundle);
 
-    const { creatorFacet, instance } = await E(zoe).startInstance(installation)
-    const tokenIssuer = await E(creatorFacet).getIssuer()
+    const { publicFacet, instance } = await E(zoe).startInstance(installation)
+    const tokenIssuer = await E(publicFacet).getIssuer()
     const TOKEN_ISSUER_BOARD_ID = await E(board).getId(tokenIssuer)
     const TOKEN_BRAND_BOARD_ID = await E(board).getId(await E(tokenIssuer).getBrand())
 
@@ -72,6 +72,7 @@ const installBundle = async (pathResolve, zoe, board) => {
  * @param {ERef<Object>} faucet
  */
 const sendDeposit = async (wallet, faucet) => {
+    /*
     // We must first fund our "feePurse", the purse that we will use to
     // pay for our interactions with Zoe.
     const RUNPurse = E(wallet).getPurse(pursePetnames.RUN);
@@ -81,6 +82,7 @@ const sendDeposit = async (wallet, faucet) => {
         runAmount,
     );
     await E(feePurse).deposit(feePayment);
+    */
 };
 
 /**

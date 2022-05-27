@@ -66,3 +66,21 @@ test('Non-fungible issuer and AmountMath', async (t) => {
     t.deepEqual(twoNFTs, AmountMath.make(nftKit.brand, harden(["cryptopunk376", "cryptopunk4551"])))
     t.deepEqual(twoNFTs, AmountMath.make(nftKit.brand, harden(["cryptopunk4551", "cryptopunk376"])))
 })
+
+test('Create Amount that is 5x another amount for AssetKind nat', async (t) => {
+    // kit: brand, issuer, mint
+    const moolaKit = makeIssuerKit('Moola', AssetKind.NAT)
+    // amount has no value, it's a description of value
+    const moola20 = AmountMath.make(moolaKit.brand, 20n)
+    const moola16 = AmountMath.make(moolaKit.brand, 16n)
+    const moola100 = AmountMath.make(moolaKit.brand, 100n)
+
+    const moola100Maybe = AmountMath.make(moolaKit.brand, 5n * moola20.value)
+    t.deepEqual(moola100, moola100Maybe)
+
+    const moola20Maybe = AmountMath.make(moolaKit.brand, moola100.value / 5n)
+    t.deepEqual(moola20, moola20Maybe)
+
+    const moola16Maybe = AmountMath.make(moolaKit.brand, moola100.value / 6n)
+    t.deepEqual(moola16, moola16Maybe)
+})

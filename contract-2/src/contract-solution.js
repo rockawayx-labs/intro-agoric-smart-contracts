@@ -16,7 +16,7 @@ import { Far } from '@endo/marshal';
 // @param {ZCF} zcf
 const start = async (zcf) => {
     assertIssuerKeywords(zcf, ['Tokens'])
-    const { Moola: moolaIssuer } = zcf.getTerms()
+    const { Moola: moolaIssuer, timer } = zcf.getTerms()
 
     const nftMint = await zcf.makeZCFMint('Awesomez', AssetKind.SET)
     const { issuer: nftIssuer } = nftMint.getIssuerRecord()
@@ -36,14 +36,15 @@ const start = async (zcf) => {
         const minCost = AmountMath.make(brand, 100n)
         assert(AmountMath.isGTE(userGives.Tokens, minCost), 'Your offer is not good enough')
 
-        nftMint.mintGains(userWants, nftSeat)
+        E(timer).delay(10n).then(() => {
+            nftMint.mintGains(userWants, nftSeat)
+            nftSeat.incrementBy(userSeat.decrementBy(userGives))
+            userSeat.incrementBy(nftSeat.decrementBy(userWants))
+            zcf.reallocate(nftSeat, userSeat)
+            userSeat.exit()
+        })
 
-        nftSeat.incrementBy(userSeat.decrementBy(userGives))
-        userSeat.incrementBy(nftSeat.decrementBy(userWants))
-        zcf.reallocate(nftSeat, userSeat)
-
-        userSeat.exit()
-        return 'You minted an NFT!'
+        return 'You NFT! was scheduled'
     }
 
     const getProfit = (seat) => {

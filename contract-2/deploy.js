@@ -34,7 +34,7 @@ import minterConstants from '../react-ui/src/moolaMinterConstants.mjs'
  * @param {ERef<Board>} board
  * @returns {Promise<{ CONTRACT_NAME: string, INSTALLATION_BOARD_ID: string, INSTANCE_BOARD_ID: string, NFT_ISSUER_BOARD_ID: string, NFT_BRAND_BOARD_ID: string }>}
  */
-const installBundle = async (pathResolve, zoe, board) => {
+const installBundle = async (pathResolve, zoe, board, timer) => {
     // We must bundle up our contract code (./src/contract.js)
     // and install it on Zoe. This returns an installationHandle, an
     // opaque, unforgeable identifier for our contract code that we can
@@ -44,7 +44,7 @@ const installBundle = async (pathResolve, zoe, board) => {
 
     const moolaIssuer = await E(board).getValue(minterConstants.TOKEN_ISSUER_BOARD_ID)
 
-    const { publicFacet, instance } = await E(zoe).startInstance(installation, harden({ Tokens: moolaIssuer }), { Moola: moolaIssuer })
+    const { publicFacet, instance } = await E(zoe).startInstance(installation, harden({ Tokens: moolaIssuer }), { Moola: moolaIssuer, timer })
     const nftIssuer = await E(publicFacet).getNFTIssuer()
     const NFT_ISSUER_BOARD_ID = await E(board).getId(nftIssuer)
     const NFT_BRAND_BOARD_ID = await E(board).getId(await E(nftIssuer).getBrand())
@@ -89,7 +89,7 @@ const sendDeposit = async (wallet, faucet) => {
 
 /**
  * @param {Promise<{zoe: ERef<ZoeService>, board: ERef<Board>, agoricNames:
- * Object, wallet: ERef<Object>, faucet: ERef<Object>}>} homePromise
+ * Object, wallet: ERef<Object>, faucet: ERef<Object>, chainTimerService}>} homePromise
  * @param {DeployPowers} powers
  */
 const deployContract = async (homePromise, { pathResolve }) => {
@@ -122,6 +122,9 @@ const deployContract = async (homePromise, { pathResolve }) => {
 
         // The faucet provides an initial amount of RUN for the user to use.
         faucet,
+
+        // ChainTimeService
+        chainTimerService: timer,
     } = home;
 
     await sendDeposit(wallet, faucet);
@@ -129,6 +132,7 @@ const deployContract = async (homePromise, { pathResolve }) => {
         pathResolve,
         zoe,
         board,
+        timer
     );
 
     // Save the constants somewhere where the UI and api can find it.
@@ -140,7 +144,7 @@ const deployContract = async (homePromise, { pathResolve }) => {
         NFT_BRAND_BOARD_ID
     };
     const defaultsFile = pathResolve(
-        `../react-ui/src/nftMinterConstants.js`,
+        `./react-ui/src/nftMinterConstants.js`,
     );
     console.log('writing', defaultsFile);
     const defaultsContents = `\

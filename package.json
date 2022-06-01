@@ -35,7 +35,8 @@
     "build": "yarn workspaces run build"
   },
   "dependencies": {
-    "agoric": "^0.14.1"
+    "agoric": "^0.15.0",
+    "@endo/ses-ava": "0.2.25"
   },
   "ava": {
     "files": [

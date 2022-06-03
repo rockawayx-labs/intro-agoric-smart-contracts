@@ -1,6 +1,7 @@
 // @ts-check
 import { test } from '@agoric/zoe/tools/prepare-test-env-ava.js';
 import { makeIssuerKit, AmountMath, AssetKind } from '@agoric/ertp';
+import { makeCopyBag } from '@agoric/store'
 
 
 test('issuers, amounts, payments', async (t) => {
@@ -53,19 +54,41 @@ test('Fungible issuer and AmountMath', async (t) => {
 
 })
 
-test('Non-fungible issuer and AmountMath', async (t) => {
-    // AssetKind.SET indicates unique items (like NFTs)
-    const nftKit = makeIssuerKit('Awesomez', AssetKind.SET)
+// Note: there are other kinds of assets, like AssetKind.SET or AssetKind.COPY_SET but they
+// are likely to be deprecated.
+
+test('Semi-fungible issuer and AmountMath - adding', async (t) => {
+    // AssetKind.COPY_BAG is a kind of asset that can have multiple types and each of those types can have an amount.
+    const nftKit = makeIssuerKit('Awesomez', AssetKind.COPY_BAG)
 
     // nftA + nftB = ... ?
-    const nftA = AmountMath.make(nftKit.brand, harden(["cryptopunk4551"]))
-    const nftB = AmountMath.make(nftKit.brand, harden(["cryptopunk376"]))
+    const nftA = AmountMath.make(nftKit.brand, makeCopyBag([["cryptopunk4551", 1n]]))
+    const nftB = AmountMath.make(nftKit.brand, makeCopyBag([["cryptopunk376", 2n]]))
     const twoNFTs = AmountMath.add(nftA, nftB)
 
     // ... equals the set of two NFTs
-    t.deepEqual(twoNFTs, AmountMath.make(nftKit.brand, harden(["cryptopunk376", "cryptopunk4551"])))
-    t.deepEqual(twoNFTs, AmountMath.make(nftKit.brand, harden(["cryptopunk4551", "cryptopunk376"])))
+    t.deepEqual(twoNFTs, AmountMath.make(nftKit.brand, makeCopyBag([["cryptopunk4551", 1n], ["cryptopunk376", 2n]])))
+    t.deepEqual(twoNFTs, AmountMath.make(nftKit.brand, makeCopyBag([["cryptopunk376", 2n], ["cryptopunk4551", 1n]])))
 })
+
+test('Depositing Semi-fungible assets to a purse', async (t) => {
+    // AssetKind.COPY_BAG is a kind of asset that can have multiple types and each of those types can have an amount.
+    const nftKit = makeIssuerKit('Awesomez', AssetKind.COPY_BAG)
+
+    const nftA = AmountMath.make(nftKit.brand, makeCopyBag([["cryptopunk4551", 3n]]))
+    const nftB = AmountMath.make(nftKit.brand, makeCopyBag([["cryptopunk376", 4n]]))
+
+    const purse = nftKit.issuer.makeEmptyPurse()
+
+    purse.deposit(nftKit.mint.mintPayment(nftA))
+    t.deepEqual(purse.getCurrentAmount(), nftA)
+
+    purse.deposit(nftKit.mint.mintPayment(nftB))
+
+    const expectedAmount = AmountMath.make(nftKit.brand, makeCopyBag([["cryptopunk4551", 3n], ["cryptopunk376", 4n]]))
+    t.deepEqual(purse.getCurrentAmount(), expectedAmount)
+})
+
 
 test('Create Amount that is 5x another amount for AssetKind nat', async (t) => {
     // kit: brand, issuer, mint

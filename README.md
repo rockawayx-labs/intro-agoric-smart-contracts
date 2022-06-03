@@ -1,5 +1,10 @@
 # Agoric workshop at the Gateway to Cosmos 2022 Prague
 
+
+## Updates
+
+- It's likely that `AssetKind.SET` and `AssetKind.COPY_SET` will be deprecated in favor of `AssetKind.COPY_BAG`. We have thus updated `contract-0` to show how `COPY_BAG` works and also used it in the 'NFT' example.
+
 ## Prerequisites
 
 Without the pre-requisites you won't be able to complete the exercises.

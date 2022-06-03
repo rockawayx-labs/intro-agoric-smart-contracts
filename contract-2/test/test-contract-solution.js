@@ -10,6 +10,7 @@ import { makeFakeVatAdmin } from '@agoric/zoe/tools/fakeVatAdmin.js';
 import { makeZoeKit } from '@agoric/zoe';
 
 import { makeIssuerKit, AmountMath, AssetKind } from '@agoric/ertp';
+import { makeCopyBag } from '@agoric/store';
 
 
 test('I want to buy an NFT', async (t) => {
@@ -33,7 +34,7 @@ test('I want to buy an NFT', async (t) => {
     t.deepEqual(nftIssuer.getAllegedName(), 'Awesomez')
 
     const nftBrand = nftIssuer.getBrand()
-    const punk4551 = AmountMath.make(nftBrand, harden(["cryptopunk4551"]))
+    const punk4551 = AmountMath.make(nftBrand, makeCopyBag([["cryptopunk4551", 1n]]))
 
     const moola100 = AmountMath.make(moolaIssuer.getBrand(), 100n)
     const firstPayment = moolaMint.mintPayment(moola100)
@@ -91,7 +92,6 @@ test('I want to buy an NFT for the WRONG currency', async (t) => {
 })
 
 
-
 test('I want to extract profit', async (t) => {
     const { admin: fakeVatAdmin } = makeFakeVatAdmin()
     const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
@@ -117,7 +117,7 @@ test('I want to extract profit', async (t) => {
 
     for (let i = 0; i < 5; i++) {
         // we mint the same "NFT" 5 times (sic!)
-        const punk4551 = AmountMath.make(nftBrand, harden(["cryptopunk4551"]))
+        const punk4551 = AmountMath.make(nftBrand, makeCopyBag([["cryptopunk4551", 1n]]))
 
         const firstPayment = moolaMint.mintPayment(moola100)
         const nftSeat = await E(zoe).offer(makeMintNFTsInvitation(), harden({
@@ -132,10 +132,6 @@ test('I want to extract profit', async (t) => {
         t.deepEqual(await nftIssuer.getAmountOf(nftPayout), punk4551)
 
         t.false(await moolaIssuer.isLive(firstPayment))
-
-        // we would normally store the minted NFT in a purse
-        // but we won't do that here as depositing the same amount twice for AssetKind.SET
-        // will trigger an error in AmountMath https://github.com/Agoric/agoric-sdk/issues/5384
     }
 
     const moola500 = AmountMath.make(moolaIssuer.getBrand(), 500n)
@@ -151,20 +147,21 @@ test('I want to extract profit', async (t) => {
 
 
 // Note: our contract does not test whether the Amount set we send in only has one member
-// so it's possible to "mint two NFTs" (in this setup)
+// so it's possible to "mint multiple NFTs" (in this setup - as a bonus fix the smart contract to only
+// allow minting of one 'NFT' item)
 test('I want to mint 2 NFTs for the price of one', async (t) => {
     const { admin: fakeVatAdmin } = makeFakeVatAdmin()
     const { zoeService: zoe } = makeZoeKit(fakeVatAdmin)
 
     const helloBundle = await bundleSource('./src/contract-solution.js');
-    const helloInstallation = await E(zoe).install(helloBundle)
+    const nftMinterInstallation = await E(zoe).install(helloBundle)
 
-    t.is(await E(helloInstallation).getBundle(), helloBundle)
+    t.is(await E(nftMinterInstallation).getBundle(), helloBundle)
 
     const { issuer: moolaIssuer, mint: moolaMint } = makeIssuerKit('Moola')
 
     const { creatorFacet, publicFacet } =
-        await E(zoe).startInstance(helloInstallation, harden({ Tokens: moolaIssuer }), { Moola: moolaIssuer })
+        await E(zoe).startInstance(nftMinterInstallation, harden({ Tokens: moolaIssuer }), { Moola: moolaIssuer })
 
     const { makeMintNFTsInvitation, getNFTIssuer } = publicFacet
     const { getBalance } = creatorFacet
@@ -173,7 +170,7 @@ test('I want to mint 2 NFTs for the price of one', async (t) => {
     const nftIssuer = getNFTIssuer()
     t.deepEqual(nftIssuer.getAllegedName(), 'Awesomez')
     const nftBrand = nftIssuer.getBrand()
-    const punk4551 = AmountMath.make(nftBrand, harden(["cryptopunk4551", "cryptopunk981"]))
+    const punk4551 = AmountMath.make(nftBrand, makeCopyBag([["cryptopunk4551", 2n], ["cryptopunk981", 3n]]))
 
     const moola100 = AmountMath.make(moolaIssuer.getBrand(), 100n)
     const firstPayment = moolaMint.mintPayment(moola100)

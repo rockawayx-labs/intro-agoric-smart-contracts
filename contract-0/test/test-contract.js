@@ -28,16 +28,25 @@ test('Fungible issuer and AmountMath', async (t) => {
     t.pass('write the test!');
 })
 
-// 1. create an issuer kit for Awesomez, which are NFTs, use AssetKind.SET
-// 2. how does AmountMath work here? create two NFTs and try to add them together
+// 1. create an issuer kit for Awesomez, which are like a collection of master NFTs
+//    that can have multiple prints. E.g. cryptopunk1/2, cryptopunk2/2, etc.
+//    Use the kind: AssetKind.COPY_BAG 
+// 2. how does AmountMath work here? create two different NFTs and try to add them together,
+//    use the function makeCopyBag to create the actual amounts
 // 3. what is the result? create the equivalent amount and test equality using t.deepEqual
-test('Non-fungible issuer and AmountMath', async (t) => {
+test('Semi-fungible issuer and AmountMath - adding', async (t) => {
     t.pass('write the test!');
 })
 
 
-// BONUS problem (no solution available)
-// what happens if you make two identical 'NFTs' and try to add them together?
-test('Adding two identical NFts', async (t) => {
+// 1. create an issuer kit for Awesomez, which are like a collection of master NFTs
+//    that can have multiple prints. E.g. cryptopunk1/2, cryptopunk2/2, etc.
+//    Use the kind: AssetKind.COPY_BAG 
+// 2. create an empty purse for this AssetKind
+//    create 3 "items" of value "cryptopunk4551" and 4 "items" of value "cryptopunk376"
+//    use the function makeCopyBag to create the actual amounts
+// 3. deposit each amount into the purse
+// 4. compare the amount to the expected amount using t.deepEqual
+test('Depositing Semi-fungible assets to a purse', async (t) => {
     t.pass('write the test!');
 })

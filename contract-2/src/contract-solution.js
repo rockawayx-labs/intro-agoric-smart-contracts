@@ -18,7 +18,7 @@ const start = async (zcf) => {
     assertIssuerKeywords(zcf, ['Tokens'])
     const { Moola: moolaIssuer } = zcf.getTerms()
 
-    const nftMint = await zcf.makeZCFMint('Awesomez', AssetKind.SET)
+    const nftMint = await zcf.makeZCFMint('Awesomez', AssetKind.COPY_BAG)
     const { issuer: nftIssuer } = nftMint.getIssuerRecord()
 
     const { zcfSeat: nftSeat } = zcf.makeEmptySeatKit()

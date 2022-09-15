@@ -1,5 +1,9 @@
-# Agoric workshop at the Gateway to Cosmos 2022 Prague
+# Introduction to writing Agoric Smart contracts
 
+## Workshops
+
+- Cosmoverse 2022 (Medellin, Colombia)
+- Gateway to Cosmos 2022 (Prague, Czech Republic) [recording](https://www.youtube.com/watch?v=hTwTc0SEdQM)
 
 ## Updates
 

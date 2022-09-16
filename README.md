@@ -24,7 +24,7 @@ Please check:
 Then:
 
 - Install the Agoric SDK `git clone https://github.com/Agoric/agoric-sdk`
-- Checkout beta `cd agoric-sdk && git checkout beta`
+- Checkout beta `cd agoric-sdk`
 - Install `yarn && yarn build`
 - Install the `agoric` script by running `yarn link-cli`
 
@@ -52,11 +52,12 @@ New concepts: Issuers, Brands, Amounts, Payments, Purses, test-driven contract d
 
 Synopsis: In the `contract-0` directory, we focus on test driven development (there is no contract to build) to learn about issuers, amounts, brands, mints, payments and purses. These are the Lego blocks for creating, describing and transferring value.
 
-How to start:
+How to start, run the following commands:
 - `cd contract-0`
-- `npx ava test/test-contract.js -w`
+- `yarn`
+- `yarn ava test/test-contract.js -w`
 
-Do this either inside the terminal.
+Do this either inside your system terminal or inside your visual code terminal.
 
 ## contract-1
 
@@ -69,7 +70,8 @@ Synopsis: `contract-1` is is our first contract that has real functionality - mi
 
 How to start:
 - `cd contract-1`
-- `npx ava test/test-contract.js -w`
+- `yarn`
+- `yarn ava test/test-contract.js -w`
 
 ## contract-2
 
@@ -81,7 +83,8 @@ Synopsis: `contract-2` allows the creator to mint NFTs in exchange for Moolas. W
 
 How to start:
 - `cd contract-2`
-- `npx ava test/test-contract.js -w`
+- `yarn`
+- `yarn ava test/test-contract.js -w`
 
 ## react-ui
 

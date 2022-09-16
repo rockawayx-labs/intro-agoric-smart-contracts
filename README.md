@@ -18,7 +18,7 @@ Without the pre-requisites you won't be able to complete the exercises.
 First make sure you have `node.js` v16 and `yarn` installed on your system.
 Please check:
 
-- `node --version` returns  `v16.YY.ZZ` the minor and patch version are not important
+- `node --version` returns  `v16.YY.ZZ` or `v18.YY.ZZ` the minor and patch version are not important
 - `yarn --version` returns a version like `1.22.ZZ`
 
 Then:
@@ -32,7 +32,7 @@ Test whether you can run `agoric --version` and get a version number like `0.15.
 
 ### Clone the repository
 
-- `git clone https://github.com/rbflabs/gateway-agoric-workshop-2022.git agoric-workshop`
+- `git clone https://github.com/rbflabs/intro-agoric-smart-contracts.git agoric-workshop`
 - `cd agoric-workshop && agoric install`
 
 Agoric install performs the necessary installation steps so we can run our examples.

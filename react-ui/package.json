@@ -8,10 +8,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@agoric/eventual-send": "^0.14.1",
+    "@agoric/wallet-connection": "^0.1.8",
     "@endo/init": "^0.5.42",
+    "@lit-labs/react": "^1.0.8",
     "@rbflabs/agoric-react-components": "^0.0.21",
+    "lit": "^2.3.1",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "ses": "^0.15.22",
+    "web-vitals": "^3.0.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",

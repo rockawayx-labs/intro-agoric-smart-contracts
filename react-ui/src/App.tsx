@@ -37,12 +37,12 @@ function App() {
         </a>{' '}
         React App!
       </h2>
-      <p className="App-description">
+      <div className="App-description">
         This app will let you mint some Moola tokens!
         <p className="App-reminder">
           Don't forget to start the Agoric chain and deploy the Moola contract!
         </p>
-      </p>
+      </div>
 
       <AgoricWalletConnectButton />
       <div className="App-content">{getContent(walletConnected, purses)}</div>

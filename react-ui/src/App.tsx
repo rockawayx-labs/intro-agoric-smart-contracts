@@ -4,7 +4,6 @@ import {
   useAgoricWalletContext,
 } from '@rbflabs/agoric-react-components';
 import MintForm from './components/MintForm';
-import NFTForm from './components/NFTForm';
 import logo from './logo.svg';
 
 const getContent = (

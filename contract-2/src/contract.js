@@ -1,47 +1,20 @@
-import { AmountMath, AssetKind } from "@agoric/ertp";
-import { assertProposalShape } from "@agoric/zoe/src/contractSupport";
+// @ts-check
 
+import '@agoric/zoe/exported.js';
+
+/** @type {ContractStartFn} */
 const start = async (zcf) => {
+  // 1. create an 'NFT' mint that can issue tokens with name Awesomez
+  // 2. write a mintNFTs offer handler that mints an NFT in exchange for Moola tokens from contract-1,
+  //    to do this, the Moola issuer must be passed in to this contract using terms (so we can identify valid Moola payments!)
+  // 3. BONUS: write a getBalance function which returns the current profit
+  // 4. BONUS: write a getProfit function which extracts the profit in Moolas and add it to creatorFacet
 
-    const { Tokens: moolaIssuer } = zcf.getTerms()
-    const moolaBrand = moolaIssuer.getBrand()
+  const creatorFacet = {};
 
-    const nftMint = await zcf.makeZCFMint('Awesomez', AssetKind.SET)
-    const { issuer: nftIssuer } = nftMint.getIssuerRecord()
+  const publicFacet = {};
 
-    // 1. write a mintNFTs function
-    // 2. BONUS: write a getBalance function which returns the current profit
-    // 3. BONUS: write a getProfit function which extracts the profit to the creator
-
-    const { zcfSeat: nftSeat } = zcf.makeEmptySeatKit()
-
-    const nftHandler = (seat) => {
-        assertProposalShape(seat, {
-            give: { Tokens: null },
-            want: { Awesomez: null }
-        })
-
-        const { give, want } = seat.getProposal()
-        const minMoola = AmountMath.make(moolaBrand, 100n)
-
-        assert(AmountMath.isGTE(give.Tokens, minMoola), 'Not enough moola, sorry.')
-
-        nftMint.mintGains(want, nftSeat)
-
-        nftSeat.incrementBy(seat.decrementBy(give))
-        seat.incrementBy(nftSeat.decrementBy(want))
-        zcf.reallocate(nftSeat, seat)
-
-        seat.exit()
-        return 'Here is your NFT!'
-    }
-
-    const publicFacet = {
-        getNFTIssuer: () => nftIssuer,
-        makeMintInvitation: () => zcf.makeInvitation(nftHandler, 'nftHandler')
-    }
-
-    return harden({ publicFacet });
+  return harden({ creatorFacet, publicFacet });
 };
 
 harden(start);

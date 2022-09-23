@@ -5,9 +5,10 @@
 - Cosmoverse 2022 (Medellin, Colombia)
 - Gateway to Cosmos 2022 (Prague, Czech Republic) [recording](https://www.youtube.com/watch?v=hTwTc0SEdQM)
 
-## Updates
+## Notice!
 
 - It's likely that `AssetKind.SET` and `AssetKind.COPY_SET` will be deprecated in favor of `AssetKind.COPY_BAG`. We have thus updated `contract-0` to show how `COPY_BAG` works and also used it in the 'NFT' example.
+- In recent builds of Agoric SDK, the ag-solo wallet is deprecated, see [issue #6189](https://github.com/Agoric/agoric-sdk/issues/6189) . To run these exercises, please make sure you are using Agoric SDK version by executing `git checkout 3482e0d98748c9b7995c93cbef9a06b0ec0fbea8` in the `agoric-sdk` directory
 
 ## Prerequisites
 
@@ -18,7 +19,7 @@ Without the pre-requisites you won't be able to complete the exercises.
 First make sure you have `node.js` v16 and `yarn` installed on your system.
 Please check:
 
-- `node --version` returns  `v16.YY.ZZ` or `v18.YY.ZZ` the minor and patch version are not important
+- `node --version` returns `v16.YY.ZZ` or `v18.YY.ZZ` the minor and patch version are not important
 - `yarn --version` returns a version like `1.22.ZZ`
 
 Then:
@@ -46,6 +47,7 @@ Each exercise has the working script and the solutions script. It's benefical to
 We recommend running a terminal inside VS Code and having Ava watching your files and re-running tests to obtain immediate feedback.
 
 ## contract-0
+
 Exercise focus: [ERTP](https://agoric.com/documentation/getting-started/ertp-introduction.html)
 
 New concepts: Issuers, Brands, Amounts, Payments, Purses, test-driven contract development
@@ -53,6 +55,7 @@ New concepts: Issuers, Brands, Amounts, Payments, Purses, test-driven contract d
 Synopsis: In the `contract-0` directory, we focus on test driven development (there is no contract to build) to learn about issuers, amounts, brands, mints, payments and purses. These are the Lego blocks for creating, describing and transferring value.
 
 How to start, run the following commands:
+
 - `cd contract-0`
 - `yarn`
 - `yarn ava test/test-contract.js -w`
@@ -61,7 +64,7 @@ Do this either inside your system terminal or inside your visual code terminal.
 
 ## contract-1
 
-Exercise focus: [ERTP](https://agoric.com/documentation/getting-started/ertp-introduction.html) [Zoe](https://agoric.com/documentation/zoe/guide/)  [Zoe Contract Facet (zcf)](https://agoric.com/documentation/zoe/api/zoe-contract-facet.html)
+Exercise focus: [ERTP](https://agoric.com/documentation/getting-started/ertp-introduction.html) [Zoe](https://agoric.com/documentation/zoe/guide/) [Zoe Contract Facet (zcf)](https://agoric.com/documentation/zoe/api/zoe-contract-facet.html)
 [Remotable objects](https://agoric.com/documentation/guides/js-programming/far.html)
 
 New concepts: Invitations, Seats, Offers, (creator, public) Facets
@@ -69,6 +72,7 @@ New concepts: Invitations, Seats, Offers, (creator, public) Facets
 Synopsis: `contract-1` is is our first contract that has real functionality - minting Moolas (imaginary fungible asset). We show how to define regular functions that can be called on the contract. Then we focus on the contract interaction lifecycle: invitation -> offer -> seat -> offer result. We then extract a payment from the offer result and deposit it in a purse.
 
 How to start:
+
 - `cd contract-1`
 - `yarn`
 - `yarn ava test/test-contract.js -w`
@@ -79,9 +83,10 @@ Exercise focus: [Zoe](https://agoric.com/documentation/zoe/guide/)
 
 New concepts: contract terms, IssuerKeywordRecord
 
-Synopsis: `contract-2` allows the creator to mint NFTs in exchange for Moolas. We show how to setup a contract to *know* about issuers. The contract we will write here accepts `Moola` and mints NFTs using an issuer `Awesomez` that it alone holds. We then run through the offer lifecycle and finally we introduce a bug into the contract and show that Zoe steps in to protect the user -- this **offer safety** in action.
+Synopsis: `contract-2` allows the creator to mint NFTs in exchange for Moolas. We show how to setup a contract to _know_ about issuers. The contract we will write here accepts `Moola` and mints NFTs using an issuer `Awesomez` that it alone holds. We then run through the offer lifecycle and finally we introduce a bug into the contract and show that Zoe steps in to protect the user -- this **offer safety** in action.
 
 How to start:
+
 - `cd contract-2`
 - `yarn`
 - `yarn ava test/test-contract.js -w`
@@ -93,10 +98,11 @@ Exercise focus: [Board](https://agoric.com/documentation/repl/board.html), [Wall
 `react-ui` is a dApp that binds together `contract-1` and `contract-2` so that the former mints `Moola` tokens which are accepted by the latter.
 
 To begin working move to the root of the repository and:
+
 - `agoric start --reset`
 - `agoric deploy contract-1/deploy.js`
 - `agoric deploy contract-2/deploy.js`
-- `agoric open` 
+- `agoric open`
 - `cd react-ui`
 - `yarn`
 - `yarn start`

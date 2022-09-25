@@ -7,11 +7,6 @@ import { AssetKind, AmountMath } from '@agoric/ertp';
 import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js';
 
 /**
-  1. create a mint for Moolas or whatever tokens you want (mints are made using makeZCFMint inside contracts)
-  2. create a function sayHello that takes a seat and returns hello, add the invitation to the creatorFacet
-  3. create a function that mints any amount of moolas requested up to 1000n and add it to the publicFacet
-  4. it's important to ensure we are able to identify the real Moola, export the issuer using a getIssuer() function in the publicFacet
-
   @type {ContractStartFn}
  */
 const start = async (zcf) => {
@@ -40,7 +35,6 @@ const start = async (zcf) => {
 
   // only accessible to the creator who instantiates the contract
   const creatorFacet = Far('creatorFacet', {
-    sayHi: () => 'hi!',
     makeHelloInvitation: () => zcf.makeInvitation(sayHello, 'sayHello'),
   });
 

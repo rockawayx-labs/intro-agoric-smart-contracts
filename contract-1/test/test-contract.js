@@ -40,50 +40,10 @@ test('I invite you to say hello', async (t) => {
 // 4. check that the offer ersult is 'Here you go'
 // 5. deposit the payment into an empty purse
 test('mint me 80 moola', async (t) => {
-  const { admin: fakeVatAdmin } = makeFakeVatAdmin();
-  const { zoeService: zoe } = makeZoeKit(fakeVatAdmin);
-  const helloBundle = await bundleSource('./src/contract.js');
-  const helloInstallation = await E(zoe).install(helloBundle);
-
-  const { publicFacet } = await E(zoe).startInstance(helloInstallation);
-
-  //  const publicFacet = await E(zoe).getPublicFacet(instance);
-
-  const invitation = await E(publicFacet).inviteMintMoola();
-  const moolaIssuer = await E(publicFacet).getIssuer();
-  const moolaBrand = moolaIssuer.getBrand();
-  const amount80 = AmountMath.make(moolaBrand, 80n);
-
-  const seat = await E(zoe).offer(invitation, {
-    want: { Tokens: amount80 },
-  });
-  const offerResult = await E(seat).getOfferResult();
-
-  t.is(offerResult, 'Here you go!');
+  t.pass('write the test!');
 });
 
 // repeat previous exercise to check that the contract refuses to mint the amount and a zero payment is extracted
 test('mint me 5000 moola', async (t) => {
-  const { admin: fakeVatAdmin } = makeFakeVatAdmin();
-  const { zoeService: zoe } = makeZoeKit(fakeVatAdmin);
-  const helloBundle = await bundleSource('./src/contract.js');
-  const helloInstallation = await E(zoe).install(helloBundle);
-
-  const { publicFacet } = await E(zoe).startInstance(helloInstallation);
-
-  //  const publicFacet = await E(zoe).getPublicFacet(instance);
-
-  const invitation = await E(publicFacet).inviteMintMoola();
-  const moolaIssuer = await E(publicFacet).getIssuer();
-  const moolaBrand = moolaIssuer.getBrand();
-  const amount5000 = AmountMath.make(moolaBrand, 5000n);
-
-  const seat = await E(zoe).offer(invitation, {
-    want: { Tokens: amount5000 },
-  });
-  try {
-    const offerResult = await E(seat).getOfferResult();
-  } catch (ex) {
-    t.pass('ok');
-  }
+  t.pass('write the test!');
 });

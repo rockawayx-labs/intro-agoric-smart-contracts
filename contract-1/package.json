@@ -29,11 +29,14 @@
     "@agoric/notifier": "^0.3.35",
     "@agoric/store": "^0.6.10",
     "@agoric/zoe": "^0.21.3",
-    "@endo/bundle-source": "^2.1.1",
+    "@endo/bundle-source": "^3.0.2",
     "@endo/eventual-send": "^0.14.8",
     "@endo/init": "^0.5.37",
     "@endo/marshal": "^0.6.3",
-    "@endo/ses-ava": "^0.2.32"
+    "@endo/ses-ava": "^0.2.32",
+    "@types/jszip": "^3.4.1",
+    "eslint-plugin-jsdoc": "^48.0.2",
+    "jszip": "^3.10.1"
   },
   "ava": {
     "files": [
